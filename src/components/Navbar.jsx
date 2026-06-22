@@ -1,3 +1,5 @@
+import logo from '../assets/images/logo.png';
+
 import { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
@@ -43,7 +45,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
 
           <NavLink to="/home" className="flex items-center gap-2.5 flex-shrink-0">
-            <img src="/src/assets/images/logo.png" alt="DivineConnect" className="h-9 w-auto object-contain" />
+            <img src={logo} alt="DivineConnect" className="h-9 w-auto object-contain" />
             <span className="font-bold text-[#2d1a0e] text-base hidden sm:block">
               Divine<span style={{ color: '#e07c0a' }}>Connect</span>
             </span>
