@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ─── Tailwind v4 Custom Theme ────────────────────────────────────────────── */
+@theme {
+  /* Saffron palette */
+  --color-saffron-50: #fff8f0;
+  --color-saffron-100: #fef0d8;
+  --color-saffron-200: #fcd9a0;
+  --color-saffron-300: #f9bb5c;
+  --color-saffron-400: #f59b24;
+  --color-saffron-500: #e07c0a;
+  --color-saffron-600: #c46206;
+  --color-saffron-700: #a34d07;
+  --color-saffron-800: #843e0e;
+  --color-saffron-900: #6c340f;
+
+  /* Cream palette */
+  --color-cream-50: #fdfaf5;
+  --color-cream-100: #faf3e8;
+  --color-cream-200: #f5e8d0;
+  --color-cream-300: #edd9b3;
+  --color-cream-400: #e2c48e;
+  --color-cream-500: #d4a96a;
+
+  /* Temple palette */
+  --color-temple-dark: #2d1a0e;
+  --color-temple-brown: #5c3317;
+  --color-temple-gold: #c9882a;
+  --color-temple-amber: #e8a635;
+
+  /* Custom shadows */
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover: 0 8px 30px rgba(0, 0, 0, 0.14);
+  --shadow-saffron: 0 4px 20px rgba(224, 124, 10, 0.3);
+
+  /* Custom border radius */
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+
+  /* Font families */
+  --font-serif: Georgia, Cambria, "Times New Roman", serif;
+  --font-sans: system-ui, -apple-system, sans-serif;
+}
+
+/* ─── Base Styles ─────────────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-cream-100);
+  color: var(--color-temple-dark);
+  font-family: var(--font-sans);
+}
+
+/* ─── Reusable Utility Classes (Tailwind v4 syntax) ──────────────────────── */
+@utility btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background-color: var(--color-saffron-500);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.625rem 1.5rem;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-saffron);
+  cursor: pointer;
+  border: none;
+
+  &:hover {
+    background-color: var(--color-saffron-600);
+    box-shadow: 0 8px 24px rgba(224, 124, 10, 0.4);
+  }
+}
+
+@utility btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border: 1.5px solid var(--color-saffron-500);
+  color: var(--color-saffron-600);
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.625rem 1.5rem;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+  background: transparent;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-saffron-50);
+  }
+}
+
+@utility section-label {
+  display: block;
+  color: var(--color-saffron-500);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.5rem;
+}
+
+@utility section-title {
+  font-size: clamp(1.5rem, 3vw, 1.875rem);
+  font-weight: 700;
+  color: var(--color-temple-dark);
+  font-family: var(--font-serif);
+  line-height: 1.2;
+}
+
+@utility card {
+  background-color: #ffffff;
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+}
