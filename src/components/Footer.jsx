@@ -1,3 +1,4 @@
+import logo from '../assets/images/logo.png';
 import { NavLink } from 'react-router-dom';
 import { Mail, Phone, MapPin } from 'lucide-react';
 
@@ -51,7 +52,7 @@ export default function Footer() {
 
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <img src="/src/assets/images/logo.png" alt="DivineConnect" className="h-9 w-auto object-contain" />
+              <img src={logo} alt="DivineConnect" className="h-9 w-auto object-contain" />
               <span className="font-bold text-lg text-[#2d1a0e]">
                 Divine<span style={{ color: '#e07c0a' }}>Connect</span>
               </span>
