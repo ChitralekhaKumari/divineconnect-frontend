@@ -10,8 +10,8 @@ const primaryNav = [
   { label: 'Temples', path: '/temples' },
   { label: 'Astrology', path: '/astrology' },
   { label: 'Prayers', path: '/prayers' },
-  { label: 'Bhajans', path: '/home' },
-  { label: 'Scriptures', path: '/home' },
+  { label: 'Bhajans', path: '/bhajans' },
+  { label: 'Scriptures', path: '/scriptures' },
   { label: 'Calendar', path: '/calendar' },
   { label: 'Contact', path: '/contact' },
 ];
