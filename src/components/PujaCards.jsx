@@ -11,7 +11,7 @@ function PujaCard({ temple, name, duration, price, image }) {
       </div>
       <div className="p-4">
         <p className="text-[10px] font-semibold tracking-widest text-[#c9882a] mb-1">{temple}</p>
-        <h3 className="font-semibold text-[#2d1a0e] text-lg mb-1" style={{ fontFamily: 'Georgia, serif' }}>{name}</h3>
+        <h3 className="font-semibold text-[#2d1a0e] text-lg mb-1" style={{ fontFamily: 'var(--font-display)' }}>{name}</h3>
         <p className="text-xs text-[#9c8672] mb-4">{duration}</p>
         <div className="flex items-center justify-between">
           <span className="text-base font-bold text-[#2d1a0e]">₹{price.toLocaleString()}</span>

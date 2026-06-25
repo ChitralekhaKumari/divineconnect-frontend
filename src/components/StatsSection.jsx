@@ -3,7 +3,7 @@ import { statsData } from '../data/index';
 function StatItem({ value, label }) {
   return (
     <div className="flex flex-col items-center text-center px-6">
-      <span className="text-2xl sm:text-3xl font-bold text-[#2d1a0e]" style={{ fontFamily: 'Georgia, serif' }}>{value}</span>
+      <span className="text-2xl sm:text-3xl font-bold text-[#2d1a0e]" style={{ fontFamily: 'var(--font-display)' }}>{value}</span>
       <span className="text-xs text-gray-500 mt-1">{label}</span>
     </div>
   );

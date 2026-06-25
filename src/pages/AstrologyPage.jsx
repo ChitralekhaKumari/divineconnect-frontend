@@ -37,12 +37,12 @@ export default function AstrologyPage() {
         <div className="absolute inset-0 opacity-20"
           style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(124,58,237,0.4) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(249,187,92,0.3) 0%, transparent 40%)' }} />
         <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-widest mb-4"
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-widest mb-4" style={{ fontFamily: 'var(--font-label)' }}
             style={{ background: 'rgba(124,58,237,0.3)', color: '#c4b5fd', border: '1px solid rgba(124,58,237,0.4)' }}>
             JYOTISH VIDYA
           </span>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4"
-            style={{ fontFamily: 'Georgia, serif' }}>
+            style={{ fontFamily: 'var(--font-display)' }}>
             Cosmic Guidance &<br />
             <span style={{ color: '#f9bb5c' }}>Vedic Astrology</span>
           </h1>

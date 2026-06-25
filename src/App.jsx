@@ -20,16 +20,16 @@ export default function App() {
       <Navbar />
       <main className="pt-16">
         <Routes>
-          <Route path="/"          element={<Navigate to="/home" replace />} />
-          <Route path="/home"      element={<HomePage />} />
-          <Route path="/temples"   element={<TemplesPage />} />
-          <Route path="/epuja"     element={<EPujaPage />} />
+          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/temples" element={<TemplesPage />} />
+          {/* <Route path="/epuja"     element={<EPujaPage />} /> */}
           <Route path="/astrology" element={<AstrologyPage />} />
-          <Route path="/pandits"   element={<PanditsPage />} />
-          <Route path="/prayers"   element={<PrayersPage />} />
-          <Route path="/contact"   element={<ContactPage />} />
-          <Route path="/calendar"  element={<CalendarPage />} />  {/* ← NEW LINE */}
-          <Route path="*"          element={<Navigate to="/home" replace />} />
+          <Route path="/pandits" element={<PanditsPage />} />
+          <Route path="/prayers" element={<PrayersPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/calendar" element={<CalendarPage />} />  {/* ← NEW LINE */}
+          <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
       </main>
       <Footer />

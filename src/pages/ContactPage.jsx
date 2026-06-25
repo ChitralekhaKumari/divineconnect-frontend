@@ -27,12 +27,12 @@ export default function ContactPage() {
       <div className="relative py-16 px-4"
         style={{ background: 'linear-gradient(135deg, #2d1a0e 0%, #5c3317 50%, #2d1a0e 100%)' }}>
         <div className="relative z-10 max-w-2xl mx-auto text-center">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-widest mb-4"
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-widest mb-4" style={{ fontFamily: 'var(--font-label)' }}
             style={{ background: 'rgba(249,187,92,0.2)', color: '#f9bb5c', border: '1px solid rgba(249,187,92,0.3)' }}>
             GET IN TOUCH
           </span>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4"
-            style={{ fontFamily: 'Georgia, serif' }}>
+            style={{ fontFamily: 'var(--font-display)' }}>
             We're Here for You
           </h1>
           <p className="text-white/70 text-sm sm:text-base max-w-lg mx-auto">
@@ -50,7 +50,7 @@ export default function ContactPage() {
             {submitted ? (
               <div className="bg-white rounded-2xl p-12 text-center" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
                 <div className="text-5xl mb-4">🙏</div>
-                <h3 className="text-xl font-semibold text-[#2d1a0e] mb-2" style={{ fontFamily: 'Georgia, serif' }}>
+                <h3 className="text-xl font-semibold text-[#2d1a0e] mb-2" style={{ fontFamily: 'var(--font-display)' }}>
                   Namaste! Message Received
                 </h3>
                 <p className="text-sm text-gray-500 max-w-sm mx-auto">
@@ -124,7 +124,7 @@ export default function ContactPage() {
 
           <div className="space-y-5">
             <div className="bg-white rounded-2xl p-6" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
-              <h3 className="font-semibold text-[#2d1a0e] text-base mb-5" style={{ fontFamily: 'Georgia, serif' }}>
+              <h3 className="font-semibold text-[#2d1a0e] text-base mb-5" style={{ fontFamily: 'var(--font-display)' }}>
                 Contact Information
               </h3>
               <div className="space-y-4">

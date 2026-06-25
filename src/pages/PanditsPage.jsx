@@ -33,12 +33,12 @@ export default function PanditsPage() {
         <div className="absolute inset-0 opacity-10"
           style={{ backgroundImage: `url('/src/assets/images/hero-temple.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
         <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-widest mb-4"
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-widest mb-4" style={{ fontFamily: 'var(--font-label)' }}
             style={{ background: 'rgba(249,187,92,0.2)', color: '#f9bb5c', border: '1px solid rgba(249,187,92,0.3)' }}>
             VERIFIED PRIESTS
           </span>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4"
-            style={{ fontFamily: 'Georgia, serif' }}>
+            style={{ fontFamily: 'var(--font-display)' }}>
             Book a Qualified Pandit
           </h1>
           <p className="text-white/70 text-sm sm:text-base max-w-lg mx-auto mb-8">

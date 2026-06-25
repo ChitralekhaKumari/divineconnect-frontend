@@ -36,7 +36,7 @@ export default function PrayersPage() {
 
         <span className="section-label">SACRED TEXTS</span>
         <h1 className="text-4xl sm:text-5xl font-bold text-[#2d1a0e] mt-2 mb-3"
-          style={{ fontFamily: 'Georgia, serif' }}>
+          style={{ fontFamily: 'var(--font-display)' }}>
           Prayer Book
         </h1>
         <p className="text-sm sm:text-base text-gray-500 max-w-xl">
@@ -92,7 +92,7 @@ export default function PrayersPage() {
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold text-[#2d1a0e]"
-                          style={{ fontFamily: 'Georgia, serif' }}>
+                          style={{ fontFamily: 'var(--font-display)' }}>
                           {prayer.title}
                         </h3>
                         <p className="text-xs text-gray-400 mt-0.5">
@@ -122,7 +122,7 @@ export default function PrayersPage() {
 
                         <p className="text-xs font-semibold mb-1" style={{ color: '#e07c0a' }}>SANSKRIT</p>
                         <p className="text-base sm:text-lg text-[#2d1a0e] leading-relaxed mb-3"
-                          style={{ fontFamily: 'Georgia, serif' }}>
+                          style={{ fontFamily: 'var(--font-display)' }}>
                           {prayer.sanskrit}
                         </p>
 

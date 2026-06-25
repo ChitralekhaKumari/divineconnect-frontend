@@ -6,7 +6,7 @@ import { Menu, X } from 'lucide-react';
 
 const primaryNav = [
   { label: 'Home', path: '/home' },
-  { label: 'ePuja', path: '/epuja' },
+  // { label: 'ePuja', path: '/epuja' },
   { label: 'Temples', path: '/temples' },
   { label: 'Astrology', path: '/astrology' },
   { label: 'Prayers', path: '/prayers' },
@@ -46,7 +46,7 @@ export default function Navbar() {
 
           <NavLink to="/home" className="flex items-center gap-2.5 flex-shrink-0">
             <img src={logo} alt="DivineConnect" className="h-9 w-auto object-contain" />
-            <span className="font-bold text-[#2d1a0e] text-base hidden sm:block">
+            <span className="font-bold text-[#2d1a0e] text-base hidden sm:block" style={{ fontFamily: 'var(--font-label)', letterSpacing: '0.03em' }}>
               Divine<span style={{ color: '#e07c0a' }}>Connect</span>
             </span>
           </NavLink>
@@ -69,15 +69,19 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-2 flex-shrink-0">
-            <button className="hidden sm:flex items-center text-xs font-semibold text-gray-600 hover:text-[#e07c0a] transition-all px-3 py-2">
+            <button className="btn-primary hidden sm:flex items-center text-xs font-semibold text-white hover:bg-[#c46900] transition-all px-3 py-2">
               Sign In
             </button>
-            <NavLink
+
+            <button className="btn-primary hidden sm:flex items-center text-xs font-semibold text-white hover:bg-[#c46900] transition-all px-3 py-2">
+              Sign Up
+            </button>
+            {/* <NavLink
               to="/epuja"
               className="btn-primary px-4 py-2 text-xs hidden sm:flex"
             >
               Book Puja
-            </NavLink>
+            </NavLink> */}
             <button
               className="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-[#fff8f0] transition-all"
               onClick={() => setMobileOpen(!mobileOpen)}
@@ -107,12 +111,21 @@ export default function Navbar() {
             ))}
           </div>
           <div className="px-4 pb-4 flex gap-2 border-t border-[#f0e4cc] pt-3">
-            <button className="flex-1 py-2.5 text-sm font-semibold text-[#e07c0a] border border-[#e07c0a] rounded-full hover:bg-[#fff8f0] transition-all">
+            {/* <button className="flex-1 py-2.5 text-sm font-semibold text-[#e07c0a] border border-[#e07c0a] rounded-full hover:bg-[#fff8f0] transition-all">
+              Sign In
+            </button> */}
+            {/* <NavLink to="/epuja" className="btn-primary flex-1 justify-center text-sm">
+              Book Puja
+            </NavLink> */}
+
+            <button className="btn-primary  sm:flex items-center text-xs font-semibold text-white hover:bg-[#c46900] transition-all px-3 py-2">
               Sign In
             </button>
-            <NavLink to="/epuja" className="btn-primary flex-1 justify-center text-sm">
-              Book Puja
-            </NavLink>
+
+            <button className="btn-primary  sm:flex items-center text-xs font-semibold text-white hover:bg-[#c46900] transition-all px-3 py-2">
+              Sign Up
+            </button>
+
           </div>
         </div>
       )}

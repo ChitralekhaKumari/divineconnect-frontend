@@ -42,7 +42,7 @@ export default function SacredModules() {
             <div key={stat.label} className="flex flex-col items-center justify-center py-5 px-3 text-center"
               style={{ background: '#fffff8' }}>
               <span className="text-lg sm:text-xl font-bold text-[#c9882a]"
-                style={{ fontFamily: 'Georgia, serif' }}>
+                style={{ fontFamily: 'var(--font-display)' }}>
                 {stat.value}
               </span>
               <span className="text-[9px] sm:text-[10px] font-semibold tracking-widest text-[#9c8672] mt-1 uppercase">

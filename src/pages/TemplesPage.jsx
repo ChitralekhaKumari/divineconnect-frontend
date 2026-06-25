@@ -85,11 +85,11 @@ export default function TemplesPage() {
                    backgroundSize: 'cover', backgroundPosition: 'center' }} />
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <span className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-widest mb-4"
-            style={{ background: 'rgba(249,187,92,0.2)', color: '#f9bb5c', border: '1px solid rgba(249,187,92,0.3)' }}>
+            style={{ background: 'rgba(249,187,92,0.2)', color: '#f9bb5c', border: '1px solid rgba(249,187,92,0.3)', fontFamily: 'var(--font-label)' }}>
             SACRED SHRINES
           </span>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4"
-            style={{ fontFamily: 'Georgia, serif' }}>
+            style={{ fontFamily: 'var(--font-display)' }}>
             Explore Temples of India
           </h1>
           <p className="text-white/70 text-sm sm:text-base max-w-lg mx-auto mb-8">
@@ -260,10 +260,9 @@ function TempleCard({ temple, index, onDetails }) {
           <span className="text-xs text-gray-500 truncate">{temple.timings_general || '–'}</span>
         </div>
         <div className="flex gap-2">
-          <button className="btn-primary flex-1 justify-center text-xs py-2">Book Puja</button>
           <button onClick={onDetails}
-            className="btn-outline px-3 py-2 text-xs hover:bg-[#fff8f0] transition-all">
-            Details
+            className="btn-outline flex-1 justify-center text-xs py-2 hover:bg-[#fff8f0] transition-all">
+            View Details
           </button>
         </div>
       </div>

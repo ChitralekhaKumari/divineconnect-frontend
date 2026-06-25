@@ -13,7 +13,7 @@ export default function CTASection() {
           AI POWERED MODULE
         </p>
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 leading-tight"
-          style={{ fontFamily: 'Georgia, serif' }}>
+          style={{ fontFamily: 'var(--font-display)' }}>
           Meet Your{' '}
           <span className="text-[rgb(249,187,92)]">Spiritual Companion</span>
         </h2>

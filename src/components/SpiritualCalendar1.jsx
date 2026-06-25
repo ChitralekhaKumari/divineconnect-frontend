@@ -119,7 +119,7 @@ export default function SpiritualCalendar() {
       <p className="text-xs font-semibold tracking-widest text-amber-700 uppercase mb-2">
         Spiritual Calendar
       </p>
-      <h1 className="text-4xl text-stone-900 mb-3" style={{ fontFamily: 'Georgia, serif' }}>
+      <h1 className="text-4xl text-stone-900 mb-3" style={{ fontFamily: 'var(--font-display)' }}>
         Your Divine Schedule
       </h1>
       <p className="text-sm text-stone-500 mb-8 max-w-md leading-relaxed">
@@ -136,7 +136,7 @@ export default function SpiritualCalendar() {
             <button onClick={goPrevMonth} className="text-stone-400 hover:text-amber-700 transition-colors">
               <ChevronLeft size={18} />
             </button>
-            <span className="text-lg text-stone-800" style={{ fontFamily: 'Georgia, serif' }}>
+            <span className="text-lg text-stone-800" style={{ fontFamily: 'var(--font-display)' }}>
               {MONTHS[month]} {year}
             </span>
             <button onClick={goNextMonth} className="text-stone-400 hover:text-amber-700 transition-colors">
@@ -199,7 +199,7 @@ export default function SpiritualCalendar() {
 
           {/* ── Selected day detail panel ── */}
           <div className="mt-6 pt-5 border-t border-stone-100">
-            <p className="text-base text-stone-800 mb-3" style={{ fontFamily: 'Georgia, serif' }}>
+            <p className="text-base text-stone-800 mb-3" style={{ fontFamily: 'var(--font-display)' }}>
               {selectedLabel}
             </p>
 
@@ -262,7 +262,7 @@ export default function SpiritualCalendar() {
           </div>
 
           <div className="bg-white rounded-2xl border border-stone-200 p-5">
-            <p className="text-base text-stone-800 mb-3" style={{ fontFamily: 'Georgia, serif' }}>
+            <p className="text-base text-stone-800 mb-3" style={{ fontFamily: 'var(--font-display)' }}>
               Quick Actions
             </p>
             <div className="flex flex-col gap-2">

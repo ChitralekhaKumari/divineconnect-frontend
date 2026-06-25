@@ -5,7 +5,7 @@ import { templeApi } from '../services/templeApi';
 export default function TempleDetailModal({ temple, onClose }) {
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error,   setError]   = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!temple) return;
@@ -34,9 +34,9 @@ export default function TempleDetailModal({ temple, onClose }) {
 
   if (!temple) return null;
 
-  const city  = temple.location_city  || temple.location || '';
+  const city = temple.location_city || temple.location || '';
   const state = temple.location_state || '';
-  const img   = temple.image_url || temple.image || '/src/assets/images/hero-temple.jpg';
+  const img = temple.image_url || temple.image || '/src/assets/images/hero-temple.jpg';
 
   return (
     <div
@@ -57,7 +57,7 @@ export default function TempleDetailModal({ temple, onClose }) {
             <X className="w-5 h-5" />
           </button>
           <div className="absolute bottom-4 left-5 right-14">
-            <h2 className="text-white text-xl font-bold" style={{ fontFamily: 'Georgia, serif' }}>
+            <h2 className="text-white text-xl font-bold" style={{ fontFamily: 'var(--font-display)' }}>
               {temple.name}
             </h2>
             {(city || state) && (
@@ -122,10 +122,10 @@ export default function TempleDetailModal({ temple, onClose }) {
               {/* Timings */}
               <Section icon={<Clock className="w-4 h-4" />} title="Temple Timings">
                 <div className="space-y-1.5 text-sm">
-                  <Row label="General Hours"  value={details.timings_general} />
-                  <Row label="Morning Aarti"  value={details.timings_morning_aarti} />
-                  <Row label="Evening Aarti"  value={details.timings_evening_aarti} />
-                  <Row label="Closed On"      value={details.timings_closed_on} />
+                  <Row label="General Hours" value={details.timings_general} />
+                  <Row label="Morning Aarti" value={details.timings_morning_aarti} />
+                  <Row label="Evening Aarti" value={details.timings_evening_aarti} />
+                  <Row label="Closed On" value={details.timings_closed_on} />
                 </div>
               </Section>
 
@@ -152,7 +152,7 @@ export default function TempleDetailModal({ temple, onClose }) {
               {(details.entry_fee || details.dress_code) && (
                 <Section icon={<span className="text-base">🎫</span>} title="Entry & Dress Code">
                   <div className="space-y-1.5 text-sm">
-                    <Row label="Entry Fee"  value={details.entry_fee} />
+                    <Row label="Entry Fee" value={details.entry_fee} />
                     <Row label="Dress Code" value={details.dress_code} />
                     {details.special_darshan && <Row label="Darshan" value={details.special_darshan} />}
                   </div>
@@ -186,12 +186,13 @@ export default function TempleDetailModal({ temple, onClose }) {
 
               {/* CTA */}
               <div className="flex gap-3 pt-2">
-                <button className="flex-1 py-3 rounded-full text-sm font-bold text-white transition-all hover:opacity-90"
+                {/* <button className="flex-1 py-3 rounded-full text-sm font-bold text-white transition-all hover:opacity-90"
                   style={{ background: 'linear-gradient(135deg, #e07c0a, #c9882a)' }}>
                   Book Puja
-                </button>
+                </button> */}
                 <button onClick={onClose}
-                  className="px-6 py-3 rounded-full text-sm font-semibold border border-[#e8d5b0] text-[#5c4a3a] hover:bg-[#fdfaf5] transition-all">
+                  className="px-6 py-3 rounded-full text-sm font-semibold border border-[#e8d5b0] text-white  hover:bg-[#e47b02] transition-all cursor-pointer"
+                  style={{ background: 'linear-gradient(135deg, #e07c0a, #c9882a)' }}>
                   Close
                 </button>
               </div>
@@ -207,7 +208,7 @@ function normalise(t) {
   return {
     ...t,
     other_deities: Array.isArray(t.other_deities) ? t.other_deities : [],
-    festivals:     Array.isArray(t.festivals)     ? t.festivals     : [],
+    festivals: Array.isArray(t.festivals) ? t.festivals : [],
   };
 }
 

@@ -41,12 +41,12 @@ export default function EPujaPage() {
         <div className="absolute inset-0 opacity-10"
           style={{ backgroundImage: `url('/src/assets/images/ritual-aarti.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
         <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-widest mb-4"
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-widest mb-4" style={{ fontFamily: 'var(--font-label)' }}
             style={{ background: 'rgba(249,187,92,0.2)', color: '#f9bb5c', border: '1px solid rgba(249,187,92,0.3)' }}>
             BOOK YOUR PUJA ONLINE
           </span>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4"
-            style={{ fontFamily: 'Georgia, serif' }}>
+            style={{ fontFamily: 'var(--font-display)' }}>
             Sacred Pujas,<br />
             <span style={{ color: '#f9bb5c' }}>Performed With Devotion</span>
           </h1>
@@ -128,9 +128,9 @@ export default function EPujaPage() {
                 )}
               </div>
               <div className="p-4">
-                <p className="text-[10px] font-bold tracking-widest text-[#c9882a] mb-1">{puja.temple}</p>
+                <p className="text-[10px] font-bold tracking-widest text-[#c9882a] mb-1" style={{ fontFamily: 'var(--font-label)' }}>{puja.temple}</p>
                 <h3 className="font-semibold text-[#2d1a0e] text-base mb-1"
-                  style={{ fontFamily: 'Georgia, serif' }}>{puja.name}</h3>
+                  style={{ fontFamily: 'var(--font-display)' }}>{puja.name}</h3>
                 <div className="flex items-center gap-3 mb-3">
                   <div className="flex items-center gap-1">
                     <Clock className="w-3 h-3 text-gray-400" />
@@ -163,7 +163,7 @@ export default function EPujaPage() {
       <div className="py-16 px-4" style={{ background: 'linear-gradient(135deg, #2d1a0e, #5c3317)' }}>
         <div className="max-w-2xl mx-auto text-center">
           <div className="text-4xl mb-4">🕉️</div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3" style={{ fontFamily: 'Georgia, serif' }}>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3" style={{ fontFamily: 'var(--font-display)' }}>
             Need Help Choosing a Puja?
           </h2>
           <p className="text-white/70 text-sm mb-8 max-w-md mx-auto">
