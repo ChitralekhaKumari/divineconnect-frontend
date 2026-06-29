@@ -13,6 +13,7 @@ import PanditsPage from './pages/PanditsPage';
 import PrayersPage from './pages/PrayersPage';
 import ContactPage from './pages/ContactPage';
 import CalendarPage from './pages/CalendarPage';   // ← NEW LINE
+import ScripturesPage from './pages/ScripturesPage';
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/prayers" element={<PrayersPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/calendar" element={<CalendarPage />} />  {/* ← NEW LINE */}
+          <Route path="/scriptures" element={<ScripturesPage />} />
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
       </main>
