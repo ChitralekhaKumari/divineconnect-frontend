@@ -122,8 +122,8 @@ export default function TempleDetailModal({ temple, onClose }) {
               <Section icon={<Clock className="w-4 h-4" />} title="Temple Timings">
                 <div className="space-y-1.5 text-sm">
                   <Row label="General Hours" value={details.timings_general} />
-                  <Row label="Morning Aarti" value={details.timings_morning_aarti} />
-                  <Row label="Evening Aarti" value={details.timings_evening_aarti} />
+                  {/* <Row label="Morning Aarti" value={details.timings_morning_aarti} /> */}
+                  {/* <Row label="Evening Aarti" value={details.timings_evening_aarti} /> */}
                   <Row label="Closed On" value={details.timings_closed_on} />
                 </div>
               </Section>
