@@ -48,25 +48,24 @@ export default function TempleDetailModal({ temple, onClose }) {
         style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}>
 
         {/* Header image */}
-        <div className="relative h-52 flex-shrink-0">
-          <img src={img} alt={temple.name} className="w-full h-full object-cover" />
-          <div className="absolute inset-0"
-            style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 60%)' }} />
+        <div className="relative flex-shrink-0 rounded-t-3xl overflow-hidden">
+          <img src={img} alt={temple.name} className="block w-full h-auto max-h-[60vh] object-contain" />
           <button onClick={onClose}
-            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/60 transition-all">
+            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/70 transition-all shadow-lg">
             <X className="w-5 h-5" />
           </button>
-          <div className="absolute bottom-4 left-5 right-14">
-            <h2 className="text-white text-xl font-bold" style={{ fontFamily: 'var(--font-display)' }}>
-              {temple.name}
-            </h2>
-            {(city || state) && (
-              <div className="flex items-center gap-1 mt-1">
-                <MapPin className="w-3.5 h-3.5 text-[#f9bb5c]" />
-                <span className="text-white/80 text-sm">{[city, state].filter(Boolean).join(', ')}</span>
-              </div>
-            )}
-          </div>
+        </div>
+
+        <div className="px-6 pt-5">
+          <h2 className="text-[#2d1a0e] text-xl font-bold" style={{ fontFamily: 'var(--font-display)' }}>
+            {temple.name}
+          </h2>
+          {(city || state) && (
+            <div className="flex items-center gap-1 mt-1.5">
+              <MapPin className="w-3.5 h-3.5 text-[#c9882a]" />
+              <span className="text-gray-500 text-sm">{[city, state].filter(Boolean).join(', ')}</span>
+            </div>
+          )}
         </div>
 
         <div className="p-6">
@@ -132,7 +131,11 @@ export default function TempleDetailModal({ temple, onClose }) {
               {/* Location */}
               <Section icon={<Navigation className="w-4 h-4" />} title="Location & How to Reach">
                 <div className="space-y-1.5 text-sm">
-                  {details.full_address && <p className="text-gray-600">{details.full_address}</p>}
+                  {details.full_address && (
+                    <p className="text-gray-600">
+                      {details.full_address.replace(/\s*\d{6}\s*$/, '')}
+                    </p>
+                  )}
                   {details.nearest_railway && (
                     <div className="flex gap-2">
                       <span className="text-gray-500 shrink-0">🚂 Railway:</span>

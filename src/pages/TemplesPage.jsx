@@ -4,9 +4,9 @@ import { MapPin, Search, Star, Video, Clock, Filter, ChevronLeft, ChevronRight, 
 import TempleDetailModal from '../components/TempleDetailModal';
 import { templeApi } from '../services/templeApi';
 
-const TAG_STYLE   = { LIVE: '#ef4444', POPULAR: '#e07c0a', FEATURED: '#7c3aed', NEW: '#16a34a' };
-const CATEGORIES  = ['All', 'Shiva', 'Vishnu', 'Devi', 'Other'];
-const LIMIT       = 12;
+const TAG_STYLE = { LIVE: '#ef4444', POPULAR: '#e07c0a', FEATURED: '#7c3aed', NEW: '#16a34a' };
+const CATEGORIES = ['All', 'Shiva', 'Vishnu', 'Devi', 'Other'];
+const LIMIT = 12;
 
 // Local placeholder images rotated by index so every card has an image
 const PLACEHOLDER_IMAGES = [
@@ -22,23 +22,23 @@ function imgFor(temple, index) {
 }
 
 export default function TemplesPage() {
-  const [temples,        setTemples]        = useState([]);
-  const [pagination,     setPagination]     = useState({ total: 0, page: 1, totalPages: 1 });
-  const [loading,        setLoading]        = useState(true);
-  const [error,          setError]          = useState(null);
-  const [search,         setSearch]         = useState('');
-  const [searchInput,    setSearchInput]    = useState('');
+  const [temples, setTemples] = useState([]);
+  const [pagination, setPagination] = useState({ total: 0, page: 1, totalPages: 1 });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [search, setSearch] = useState('');
+  const [searchInput, setSearchInput] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
-  const [liveOnly,       setLiveOnly]       = useState(false);
-  const [currentPage,    setCurrentPage]    = useState(1);
+  const [liveOnly, setLiveOnly] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedTemple, setSelectedTemple] = useState(null);
-  const [featuredLive,   setFeaturedLive]   = useState([]);
+  const [featuredLive, setFeaturedLive] = useState([]);
 
   // Load featured/live temples for the bottom strip
   useEffect(() => {
     templeApi.getFeatured()
       .then(r => setFeaturedLive(r.data || []))
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   // Main data fetch – re-runs whenever filters/page change
@@ -47,11 +47,11 @@ export default function TemplesPage() {
     setError(null);
     try {
       const params = {
-        page:     currentPage,
-        limit:    LIMIT,
-        search:   search || undefined,
+        page: currentPage,
+        limit: LIMIT,
+        search: search || undefined,
         category: activeCategory !== 'All' ? activeCategory : undefined,
-        tag:      liveOnly ? 'LIVE' : undefined,
+        tag: liveOnly ? 'LIVE' : undefined,
       };
       const res = await templeApi.getTemples(params);
       setTemples(res.data || []);
@@ -67,8 +67,8 @@ export default function TemplesPage() {
 
   // Reset to page 1 when filters change
   function applyCategory(cat) { setActiveCategory(cat); setCurrentPage(1); }
-  function applyLive()        { setLiveOnly(v => !v);   setCurrentPage(1); }
-  function applySearch()      { setSearch(searchInput);  setCurrentPage(1); }
+  function applyLive() { setLiveOnly(v => !v); setCurrentPage(1); }
+  function applySearch() { setSearch(searchInput); setCurrentPage(1); }
 
   return (
     <div style={{ background: '#fdfaf5', minHeight: '100vh' }}>
@@ -81,8 +81,10 @@ export default function TemplesPage() {
       <div className="relative py-16 px-4"
         style={{ background: 'linear-gradient(135deg, #2d1a0e 0%, #5c3317 50%, #2d1a0e 100%)' }}>
         <div className="absolute inset-0 opacity-10"
-          style={{ backgroundImage: `url('/src/assets/images/hero-temple.jpg')`,
-                   backgroundSize: 'cover', backgroundPosition: 'center' }} />
+          style={{
+            backgroundImage: `url('/src/assets/images/hero-temple.jpg')`,
+            backgroundSize: 'cover', backgroundPosition: 'center'
+          }} />
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <span className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-widest mb-4"
             style={{ background: 'rgba(249,187,92,0.2)', color: '#f9bb5c', border: '1px solid rgba(249,187,92,0.3)', fontFamily: 'var(--font-label)' }}>
@@ -217,7 +219,13 @@ function TempleCard({ temple, index, onDetails }) {
       style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.07)' }}>
       <div className="relative h-52 overflow-hidden">
         <img src={imgFor(temple, index)} alt={temple.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          style={{ objectPosition: 'center top' }}
+          loading="lazy"
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = PLACEHOLDER_IMAGES[index % PLACEHOLDER_IMAGES.length];
+          }} />
         <div className="absolute inset-0"
           style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 55%)' }} />
         {temple.tag && (
@@ -302,12 +310,12 @@ function Pagination({ pagination, currentPage, onPage }) {
         p === '…'
           ? <span key={`ellipsis-${i}`} className="px-2 text-gray-400 text-sm">…</span>
           : <button key={p} onClick={() => onPage(p)}
-              className="w-9 h-9 rounded-full text-xs font-bold transition-all"
-              style={p === currentPage
-                ? { background: '#e07c0a', color: '#fff', boxShadow: '0 4px 12px rgba(224,124,10,0.35)' }
-                : { background: '#fff', color: '#2d1a0e', border: '1px solid #e8d5b0' }}>
-              {p}
-            </button>
+            className="w-9 h-9 rounded-full text-xs font-bold transition-all"
+            style={p === currentPage
+              ? { background: '#e07c0a', color: '#fff', boxShadow: '0 4px 12px rgba(224,124,10,0.35)' }
+              : { background: '#fff', color: '#2d1a0e', border: '1px solid #e8d5b0' }}>
+            {p}
+          </button>
       )}
 
       <button
