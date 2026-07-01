@@ -155,7 +155,7 @@ export default function TemplesPage() {
 
         {/* Loading skeleton */}
         {loading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {Array.from({ length: LIMIT }).map((_, i) => (
               <div key={i} className="bg-white rounded-2xl overflow-hidden animate-pulse"
                 style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.07)' }}>
@@ -217,7 +217,7 @@ function TempleCard({ temple, index, onDetails }) {
   return (
     <div className="bg-white rounded-2xl overflow-hidden group cursor-pointer hover:shadow-xl transition-all duration-300"
       style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.07)' }}>
-      <div className="relative h-52 overflow-hidden">
+      <div className="relative h-80 overflow-hidden">
         <img src={imgFor(temple, index)} alt={temple.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           style={{ objectPosition: 'center top' }}
