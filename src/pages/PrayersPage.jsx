@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
-import { BookOpen, Heart, ChevronDown, Loader2 } from 'lucide-react';
+import { BookOpen, Heart, Loader2 } from 'lucide-react';
 import { prayerApi } from '../services/prayerApi';
+import PrayerDetailModal from '../components/PrayerDetailModal';
 
 const CATEGORIES = ['All', 'Ganesha', 'Shiva', 'Vishnu', 'Rama', 'Durga', 'Lakshmi', 'Saraswati', 'Surya', 'Hanuman', 'Savitri', 'Navagraha', 'Universal', 'Gita'];
 
 export default function PrayersPage() {
   const [activeCategory, setActiveCategory] = useState('All');
-  const [expandedId, setExpandedId] = useState(null);
+  const [selectedPrayer, setSelectedPrayer] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const [prayers, setPrayers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,7 +17,7 @@ export default function PrayersPage() {
     let cancelled = false;
     setLoading(true);
     setError(null);
-    setExpandedId(null);
+    setSelectedPrayer(null);
 
     prayerApi
       .getPrayers(activeCategory)
@@ -27,7 +28,6 @@ export default function PrayersPage() {
     return () => { cancelled = true; };
   }, [activeCategory]);
 
-  const toggleExpand = (id) => setExpandedId((p) => (p === id ? null : id));
   const toggleFav = (id) => setFavorites((p) => p.includes(id) ? p.filter(f => f !== id) : [...p, id]);
 
   return (
@@ -76,14 +76,13 @@ export default function PrayersPage() {
         {!loading && !error && (
           <div className="flex flex-col gap-4">
             {prayers.map((prayer) => {
-              const isExpanded = expandedId === prayer.id;
               const isFav = favorites.includes(prayer.id);
               return (
                 <div key={prayer.id} className="bg-white rounded-2xl transition-all duration-300"
                   style={{ border: '1px solid #f5e8d0', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
 
                   {/* Header row */}
-                  <button onClick={() => toggleExpand(prayer.id)}
+                  <button onClick={() => setSelectedPrayer(prayer)}
                     className="w-full flex items-center justify-between gap-4 px-5 sm:px-6 py-5 text-left">
                     <div className="flex items-center gap-4">
                       <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
@@ -108,50 +107,22 @@ export default function PrayersPage() {
                         <Heart className="w-4 h-4"
                           style={{ color: isFav ? '#e07c0a' : '#9c8672', fill: isFav ? '#e07c0a' : 'none' }} />
                       </span>
-                      <ChevronDown className="w-4 h-4 text-gray-400 transition-transform duration-200"
-                        style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }} />
                     </div>
                   </button>
-
-                  {/* Expanded content */}
-                  {isExpanded && (
-                    <div className="px-5 sm:px-6 pb-6 -mt-1">
-
-                      <div className="rounded-xl p-4 sm:p-5"
-                        style={{ background: '#fdfaf5', border: '1px solid #f5e8d0' }}>
-
-                        <p className="text-xs font-semibold mb-1" style={{ color: '#e07c0a' }}>SANSKRIT</p>
-                        <p className="text-base sm:text-lg text-[#2d1a0e] leading-relaxed mb-3"
-                          style={{ fontFamily: 'var(--font-display)' }}>
-                          {prayer.sanskrit}
-                        </p>
-
-                        <p className="text-xs font-semibold mb-1" style={{ color: '#e07c0a' }}>TRANSLITERATION</p>
-                        <p className="text-xs sm:text-sm text-gray-600 italic mb-4">
-                          {prayer.transliteration}
-                        </p>
-
-                        <div className="mb-3">
-                          <p className="text-xs font-semibold text-[#5c4a3a] mb-1">MEANING</p>
-                          <p className="text-sm text-gray-600 leading-relaxed">
-                            {prayer.meaning}
-                          </p>
-                        </div>
-
-                        <div>
-                          <p className="text-xs font-semibold text-[#5c4a3a] mb-1">BENEFITS</p>
-                          <p className="text-sm text-gray-600 leading-relaxed">
-                            {prayer.benefits}
-                          </p>
-                        </div>
-
-                      </div>
-                    </div>
-                  )}
                 </div>
               );
             })}
           </div>
+        )}
+
+        {/* Prayer detail popup */}
+        {selectedPrayer && (
+          <PrayerDetailModal
+            prayer={selectedPrayer}
+            isFav={favorites.includes(selectedPrayer.id)}
+            onToggleFav={toggleFav}
+            onClose={() => setSelectedPrayer(null)}
+          />
         )}
       </div>
     </div>

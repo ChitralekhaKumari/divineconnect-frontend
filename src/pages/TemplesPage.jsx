@@ -5,7 +5,7 @@ import TempleDetailModal from '../components/TempleDetailModal';
 import { templeApi } from '../services/templeApi';
 
 const TAG_STYLE = { LIVE: '#ef4444', POPULAR: '#e07c0a', FEATURED: '#7c3aed', NEW: '#16a34a' };
-const CATEGORIES = ['All', 'Shiva', 'Vishnu', 'Devi', 'Other'];
+const CATEGORIES = ['All', 'Shiva', 'Devi', 'Other'];
 const LIMIT = 12;
 
 // Local placeholder images rotated by index so every card has an image
@@ -128,14 +128,14 @@ export default function TemplesPage() {
               {cat}
             </button>
           ))}
-          <button onClick={applyLive}
+          {/* <button onClick={applyLive}
             className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-150 ml-2"
             style={liveOnly
               ? { background: '#ef4444', color: '#fff' }
               : { background: '#fdfaf5', color: '#5c4a3a', border: '1px solid #e8d5b0' }}>
             <span className={`w-1.5 h-1.5 rounded-full ${liveOnly ? 'bg-white' : 'bg-red-500'} animate-pulse`} />
             Live Only
-          </button>
+          </button> */}
           <span className="ml-auto text-xs text-gray-400 whitespace-nowrap flex-shrink-0">
             {pagination.total} temples
           </span>

@@ -13,12 +13,14 @@ import PrayersPage from './pages/PrayersPage';
 import ContactPage from './pages/ContactPage';
 import CalendarPage from './pages/CalendarPage';
 import ScripturesPage from './pages/ScripturesPage';
+import ScriptureDetailPage from './pages/ScriptureDetailPage';
 
 // Pages that require login
 const PROTECTED = [
   { path: '/prayers', element: <PrayersPage />, label: 'Prayers' },
   { path: '/astrology', element: <AstrologyPage />, label: 'Astrology' },
   { path: '/scriptures', element: <ScripturesPage />, label: 'Scriptures' },
+  { path: '/scriptures/:slug', element: <ScriptureDetailPage />, label: 'Scriptures' },
 ];
 
 export default function App() {
