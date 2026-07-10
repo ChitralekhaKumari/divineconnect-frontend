@@ -46,15 +46,19 @@ export const scriptureApi = {
     search: (q, page = 1) => request('/scriptures/search', { q, page }),
 
     // ── Auth-required ──
+    // Bookmarks/favorites/progress are keyed by scripture slug + chapter/verse
+    // number instead of a DB id, since scripture content lives in .md files.
     getBookmarks: () => request('/scriptures/bookmarks'),
-    addBookmark: (verseId) => mutate('POST', '/scriptures/bookmarks', { verseId }),
-    removeBookmark: (verseId) => mutate('DELETE', `/scriptures/bookmarks/${verseId}`),
+    addBookmark: (scriptureSlug, chapterNumber, verseNumber) =>
+        mutate('POST', '/scriptures/bookmarks', { scriptureSlug, chapterNumber, verseNumber }),
+    removeBookmark: (scriptureSlug, chapterNumber, verseNumber) =>
+        mutate('DELETE', `/scriptures/bookmarks/${scriptureSlug}/${chapterNumber}/${verseNumber}`),
 
     getFavorites: () => request('/scriptures/favorites'),
-    addFavorite: (scriptureId) => mutate('POST', '/scriptures/favorites', { scriptureId }),
-    removeFavorite: (scriptureId) => mutate('DELETE', `/scriptures/favorites/${scriptureId}`),
+    addFavorite: (scriptureSlug) => mutate('POST', '/scriptures/favorites', { scriptureSlug }),
+    removeFavorite: (scriptureSlug) => mutate('DELETE', `/scriptures/favorites/${scriptureSlug}`),
 
-    updateProgress: (scriptureId, chapterNumber, verseNumber) =>
-        mutate('PUT', '/scriptures/progress', { scriptureId, chapterNumber, verseNumber }),
+    updateProgress: (scriptureSlug, chapterNumber, verseNumber) =>
+        mutate('PUT', '/scriptures/progress', { scriptureSlug, chapterNumber, verseNumber }),
     getRecentReads: () => request('/scriptures/recent'),
 };

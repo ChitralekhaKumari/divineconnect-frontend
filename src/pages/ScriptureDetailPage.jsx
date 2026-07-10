@@ -34,11 +34,15 @@ export default function ScriptureDetailPage() {
         return () => { cancelled = true; };
     }, [slug]);
 
-    // Load bookmarked verse ids (best-effort, guests skip)
+    // Load bookmarked verses (best-effort, guests skip).
+    // Stored as composite keys "scriptureSlug:chapterNumber:verseNumber" so
+    // they can be compared against in-chapter verse numbers without a DB id.
     useEffect(() => {
         if (!isLoggedIn) return;
         scriptureApi.getBookmarks()
-            .then((res) => setBookmarks((res.data || []).map((b) => b.id)))
+            .then((res) => setBookmarks(
+                (res.data || []).map((b) => `${b.scripture_slug}:${b.chapter_number}:${b.verse_number}`)
+            ))
             .catch(() => { });
     }, [isLoggedIn]);
 
@@ -52,8 +56,8 @@ export default function ScriptureDetailPage() {
         scriptureApi.getChapter(slug, num)
             .then((res) => {
                 setChapterData(res.data);
-                if (isLoggedIn && meta) {
-                    scriptureApi.updateProgress(meta.id, num, null).catch(() => { });
+                if (isLoggedIn) {
+                    scriptureApi.updateProgress(slug, num, null).catch(() => { });
                 }
             })
             .catch(() => setChapterError('Unable to load this chapter right now.'))
@@ -66,15 +70,27 @@ export default function ScriptureDetailPage() {
         setChapterError(null);
     };
 
-    const toggleBookmark = (verseId) => {
-        if (!isLoggedIn) return;
-        const isBookmarked = bookmarks.includes(verseId);
-        setBookmarks((prev) => isBookmarked ? prev.filter((id) => id !== verseId) : [...prev, verseId]);
+    // verseNumber comes from ChapterVersesModal (it only knows verse.id, i.e.
+    // the verse number within the currently open chapter) — slug + chapter
+    // come from this page's own state, composed here into the full key.
+    const toggleBookmark = (verseNumber) => {
+        if (!isLoggedIn || !chapterNumber) return;
+        const key = `${slug}:${chapterNumber}:${verseNumber}`;
+        const isBookmarked = bookmarks.includes(key);
+        setBookmarks((prev) => isBookmarked ? prev.filter((k) => k !== key) : [...prev, key]);
         const action = isBookmarked ? scriptureApi.removeBookmark : scriptureApi.addBookmark;
-        action(verseId).catch(() => {
-            setBookmarks((prev) => isBookmarked ? [...prev, verseId] : prev.filter((id) => id !== verseId));
+        action(slug, chapterNumber, verseNumber).catch(() => {
+            setBookmarks((prev) => isBookmarked ? [...prev, key] : prev.filter((k) => k !== key));
         });
     };
+
+    // ChapterVersesModal only deals in verse numbers scoped to the open
+    // chapter, so translate the global composite-key list down to that.
+    const bookmarksInOpenChapter = chapterNumber
+        ? bookmarks
+            .filter((k) => k.startsWith(`${slug}:${chapterNumber}:`))
+            .map((k) => parseInt(k.split(':')[2], 10))
+        : [];
 
     const copyVerse = (verse) => {
         const text = [verse.sanskrit, verse.transliteration, verse.english].filter(Boolean).join('\n\n');
@@ -170,7 +186,7 @@ export default function ScriptureDetailPage() {
                     loading={loadingChapter}
                     error={chapterError}
                     isLoggedIn={isLoggedIn}
-                    bookmarks={bookmarks}
+                    bookmarks={bookmarksInOpenChapter}
                     onToggleBookmark={toggleBookmark}
                     copiedId={copiedId}
                     onCopyVerse={copyVerse}

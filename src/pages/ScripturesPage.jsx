@@ -28,21 +28,21 @@ export default function ScripturesPage() {
     useEffect(() => {
         if (!localStorage.getItem('dc_token')) return;
         scriptureApi.getFavorites()
-            .then((res) => setFavorites((res.data || []).map((f) => f.id)))
+            .then((res) => setFavorites((res.data || []).map((f) => f.slug)))
             .catch(() => { });
     }, []);
 
-    const toggleFav = (scriptureId, e) => {
+    const toggleFav = (scriptureSlug, e) => {
         e.stopPropagation();
-        const isFav = favorites.includes(scriptureId);
+        const isFav = favorites.includes(scriptureSlug);
         setFavorites((prev) =>
-            isFav ? prev.filter((f) => f !== scriptureId) : [...prev, scriptureId]
+            isFav ? prev.filter((f) => f !== scriptureSlug) : [...prev, scriptureSlug]
         );
         const action = isFav ? scriptureApi.removeFavorite : scriptureApi.addFavorite;
-        action(scriptureId).catch(() => {
+        action(scriptureSlug).catch(() => {
             // revert on failure
             setFavorites((prev) =>
-                isFav ? [...prev, scriptureId] : prev.filter((f) => f !== scriptureId)
+                isFav ? [...prev, scriptureSlug] : prev.filter((f) => f !== scriptureSlug)
             );
         });
     };
@@ -84,10 +84,10 @@ export default function ScripturesPage() {
                 {!loading && !error && scriptures.length > 0 && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {scriptures.map((scripture) => {
-                            const isFav = favorites.includes(scripture.id);
+                            const isFav = favorites.includes(scripture.slug);
                             return (
                                 <div
-                                    key={scripture.id}
+                                    key={scripture.slug}
                                     className="bg-white rounded-2xl p-6 cursor-pointer transition-all duration-300"
                                     style={{
                                         border: '1px solid #f5e8d0',
@@ -112,7 +112,7 @@ export default function ScripturesPage() {
                                             {scripture.emoji}
                                         </div>
                                         <button
-                                            onClick={(e) => toggleFav(scripture.id, e)}
+                                            onClick={(e) => toggleFav(scripture.slug, e)}
                                             className="w-9 h-9 rounded-full flex items-center justify-center transition-colors"
                                             style={{ background: '#f7f2ea' }}
                                         >
