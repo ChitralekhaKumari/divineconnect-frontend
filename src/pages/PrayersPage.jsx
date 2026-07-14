@@ -1,17 +1,35 @@
-import { useState, useEffect } from 'react';
-import { BookOpen, Heart, Loader2 } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { BookOpen, Loader2 } from 'lucide-react';
 import { prayerApi } from '../services/prayerApi';
 import PrayerDetailModal from '../components/PrayerDetailModal';
+import WishlistButton from '../components/WishlistButton';
+import { useToast } from '../context/ToastContext';
 
 const CATEGORIES = ['All', 'Ganesha', 'Shiva', 'Vishnu', 'Rama', 'Durga', 'Lakshmi', 'Saraswati', 'Surya', 'Hanuman', 'Savitri', 'Navagraha', 'Universal', 'Gita'];
+
+// Builds the wishlist item shape for a prayer.
+function toWishlistItem(prayer) {
+  return {
+    type: 'prayer',
+    id: prayer.slug || prayer.id,
+    title: prayer.title,
+    subtitle: `${prayer.deity} · ${prayer.frequency}`,
+    meta: { emoji: '🙏' },
+  };
+}
 
 export default function PrayersPage() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [selectedPrayer, setSelectedPrayer] = useState(null);
-  const [favorites, setFavorites] = useState([]);
   const [prayers, setPrayers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const openId = searchParams.get('open');
+  const { showToast } = useToast();
+  const handledOpenId = useRef(null); // which ?open value we've already acted on
 
   useEffect(() => {
     let cancelled = false;
@@ -28,7 +46,39 @@ export default function PrayersPage() {
     return () => { cancelled = true; };
   }, [activeCategory]);
 
-  const toggleFav = (id) => setFavorites((p) => p.includes(id) ? p.filter(f => f !== id) : [...p, id]);
+  // Auto-open the item requested via ?open=<slug> (e.g. from Wishlist)
+  useEffect(() => {
+    if (!openId || loading || handledOpenId.current === openId) return;
+
+    function finish(prayer) {
+      handledOpenId.current = openId;
+      if (prayer) {
+        const el = document.getElementById(`prayer-${prayer.slug || prayer.id}`);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setSelectedPrayer(prayer);
+      } else {
+        showToast('This prayer could not be found. It may have been removed.', 'error');
+      }
+      // clear the param so a refresh doesn't reopen it
+      setSearchParams((prev) => {
+        const next = new URLSearchParams(prev);
+        next.delete('open');
+        return next;
+      }, { replace: true });
+    }
+
+    const found = prayers.find((p) => (p.slug || String(p.id)) === openId);
+    if (found) {
+      finish(found);
+      return;
+    }
+
+    let cancelled = false;
+    prayerApi.getBySlug(openId)
+      .then((res) => { if (!cancelled) finish(res.data); })
+      .catch(() => { if (!cancelled) finish(null); });
+    return () => { cancelled = true; };
+  }, [openId, loading, prayers, showToast, setSearchParams]);
 
   return (
     <div style={{ background: '#fdfaf5', minHeight: '100vh' }}>
@@ -75,43 +125,35 @@ export default function PrayersPage() {
         {/* Prayer list */}
         {!loading && !error && (
           <div className="flex flex-col gap-4">
-            {prayers.map((prayer) => {
-              const isFav = favorites.includes(prayer.id);
-              return (
-                <div key={prayer.id} className="bg-white rounded-2xl transition-all duration-300"
-                  style={{ border: '1px solid #f5e8d0', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+            {prayers.map((prayer) => (
+              <div key={prayer.id} id={`prayer-${prayer.slug || prayer.id}`}
+                className="bg-white rounded-2xl transition-all duration-300"
+                style={{ border: '1px solid #f5e8d0', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
 
-                  {/* Header row */}
-                  <button onClick={() => setSelectedPrayer(prayer)}
-                    className="w-full flex items-center justify-between gap-4 px-5 sm:px-6 py-5 text-left">
-                    <div className="flex items-center gap-4">
-                      <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                        style={{ background: '#fdf0d8' }}>
-                        <BookOpen className="w-5 h-5" style={{ color: '#e07c0a' }} />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-[#2d1a0e]"
-                          style={{ fontFamily: 'var(--font-display)' }}>
-                          {prayer.title}
-                        </h3>
-                        <p className="text-xs text-gray-400 mt-0.5">
-                          {prayer.deity} · {prayer.frequency}
-                        </p>
-                      </div>
+                {/* Header row */}
+                <button onClick={() => setSelectedPrayer(prayer)}
+                  className="w-full flex items-center justify-between gap-4 px-5 sm:px-6 py-5 text-left">
+                  <div className="flex items-center gap-4">
+                    <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{ background: '#fdf0d8' }}>
+                      <BookOpen className="w-5 h-5" style={{ color: '#e07c0a' }} />
                     </div>
-                    <div className="flex items-center gap-3 flex-shrink-0">
-                      <span role="button"
-                        onClick={(e) => { e.stopPropagation(); toggleFav(prayer.id); }}
-                        className="w-9 h-9 rounded-full flex items-center justify-center"
-                        style={{ background: '#f7f2ea' }}>
-                        <Heart className="w-4 h-4"
-                          style={{ color: isFav ? '#e07c0a' : '#9c8672', fill: isFav ? '#e07c0a' : 'none' }} />
-                      </span>
+                    <div>
+                      <h3 className="text-lg font-semibold text-[#2d1a0e]"
+                        style={{ fontFamily: 'var(--font-display)' }}>
+                        {prayer.title}
+                      </h3>
+                      <p className="text-xs text-gray-400 mt-0.5">
+                        {prayer.deity} · {prayer.frequency}
+                      </p>
                     </div>
-                  </button>
-                </div>
-              );
-            })}
+                  </div>
+                  <div className="flex items-center gap-3 flex-shrink-0">
+                    <WishlistButton item={toWishlistItem(prayer)} />
+                  </div>
+                </button>
+              </div>
+            ))}
           </div>
         )}
 
@@ -119,8 +161,6 @@ export default function PrayersPage() {
         {selectedPrayer && (
           <PrayerDetailModal
             prayer={selectedPrayer}
-            isFav={favorites.includes(selectedPrayer.id)}
-            onToggleFav={toggleFav}
             onClose={() => setSelectedPrayer(null)}
           />
         )}

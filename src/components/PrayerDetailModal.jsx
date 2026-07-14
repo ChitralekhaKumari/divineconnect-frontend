@@ -1,7 +1,16 @@
-import { X, BookOpen, Heart } from 'lucide-react';
+import { X, BookOpen } from 'lucide-react';
+import WishlistButton from './WishlistButton';
 
-export default function PrayerDetailModal({ prayer, isFav, onToggleFav, onClose }) {
+export default function PrayerDetailModal({ prayer, onClose }) {
     if (!prayer) return null;
+
+    const wishlistItem = {
+        type: 'prayer',
+        id: prayer.slug || prayer.id,
+        title: prayer.title,
+        subtitle: `${prayer.deity} · ${prayer.frequency}`,
+        meta: { emoji: '🙏' },
+    };
 
     return (
         <div
@@ -30,13 +39,7 @@ export default function PrayerDetailModal({ prayer, isFav, onToggleFav, onClose 
                     </div>
 
                     <div className="flex items-center gap-2 flex-shrink-0">
-                        <span role="button"
-                            onClick={() => onToggleFav(prayer.id)}
-                            className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer"
-                            style={{ background: '#f7f2ea' }}>
-                            <Heart className="w-4 h-4"
-                                style={{ color: isFav ? '#e07c0a' : '#9c8672', fill: isFav ? '#e07c0a' : 'none' }} />
-                        </span>
+                        <WishlistButton item={wishlistItem} />
                         <button onClick={onClose}
                             className="w-9 h-9 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/70 transition-all shadow-lg">
                             <X className="w-5 h-5" />

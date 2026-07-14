@@ -11,7 +11,11 @@ async function request(path, params = {}) {
         if (v !== undefined && v !== null && v !== '') url.searchParams.set(k, v);
     });
     const res = await fetch(url.toString(), { headers: authHeaders() });
-    if (!res.ok) throw new Error(`API error ${res.status}`);
+    if (!res.ok) {
+        const err = new Error(`API error ${res.status}`);
+        err.status = res.status;
+        throw err;
+    }
     return res.json();
 }
 
@@ -46,14 +50,8 @@ export const scriptureApi = {
     search: (q, page = 1) => request('/scriptures/search', { q, page }),
 
     // ── Auth-required ──
-    // Bookmarks/favorites/progress are keyed by scripture slug + chapter/verse
+    // Favorites/progress are keyed by scripture slug + chapter/verse
     // number instead of a DB id, since scripture content lives in .md files.
-    getBookmarks: () => request('/scriptures/bookmarks'),
-    addBookmark: (scriptureSlug, chapterNumber, verseNumber) =>
-        mutate('POST', '/scriptures/bookmarks', { scriptureSlug, chapterNumber, verseNumber }),
-    removeBookmark: (scriptureSlug, chapterNumber, verseNumber) =>
-        mutate('DELETE', `/scriptures/bookmarks/${scriptureSlug}/${chapterNumber}/${verseNumber}`),
-
     getFavorites: () => request('/scriptures/favorites'),
     addFavorite: (scriptureSlug) => mutate('POST', '/scriptures/favorites', { scriptureSlug }),
     removeFavorite: (scriptureSlug) => mutate('DELETE', `/scriptures/favorites/${scriptureSlug}`),

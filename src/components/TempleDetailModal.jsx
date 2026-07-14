@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X, MapPin, Clock, Star, Landmark, Info, Navigation, Phone, Calendar, Loader2 } from 'lucide-react';
 import { templeApi } from '../services/templeApi';
+import WishlistButton from './WishlistButton';
 
 export default function TempleDetailModal({ temple, onClose }) {
   const [details, setDetails] = useState(null);
@@ -50,6 +51,13 @@ export default function TempleDetailModal({ temple, onClose }) {
         {/* Header image */}
         <div className="relative flex-shrink-0 rounded-t-3xl overflow-hidden">
           <img src={img} alt={temple.name} className="block w-full h-auto max-h-[60vh] object-contain" />
+          <div className="absolute top-4 right-16">
+            <WishlistButton
+              item={{ type: 'temple', id: temple.id, title: temple.name, subtitle: [city, state].filter(Boolean).join(', '), image: img }}
+              style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}
+              idleColor="#ffffff"
+            />
+          </div>
           <button onClick={onClose}
             className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/70 transition-all shadow-lg">
             <X className="w-5 h-5" />

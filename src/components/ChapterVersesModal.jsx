@@ -1,19 +1,24 @@
-import { X, ChevronLeft, ChevronRight, Bookmark, Copy, Share2, Loader2, Check } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Copy, Share2, Loader2, Check } from 'lucide-react';
 
 export default function ChapterVersesModal({
     scriptureTitle,
+    breadcrumb,       // optional string[] — e.g. ['Scriptures', 'Ramayan', 'Bala Kanda'] — shown above the title
+    headingOverride,  // optional string — replaces the default "Ch. N — Title" heading
     chapterData,
     loading,
     error,
-    isLoggedIn,
-    bookmarks,
-    onToggleBookmark,
     copiedId,
     onCopyVerse,
     onShareVerse,
     onNavigateChapter,
     onClose,
 }) {
+    const heading = headingOverride
+        ? headingOverride
+        : (chapterData
+            ? `Ch. ${chapterData.chapter.chapter_number}${chapterData.chapter.title ? ` — ${chapterData.chapter.title}` : ''}`
+            : 'Loading chapter…');
+
     return (
         <div
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -26,12 +31,13 @@ export default function ChapterVersesModal({
                 {/* Header */}
                 <div className="flex items-start justify-between gap-4 px-6 pt-6 pb-4"
                     style={{ borderBottom: '1px solid #f5e8d0' }}>
-                    <div>
-                        <p className="text-xs text-gray-400 mb-1">{scriptureTitle}</p>
+                    <div className="min-w-0">
+                        {breadcrumb && breadcrumb.length > 0 && (
+                            <p className="text-[11px] text-gray-400 mb-1 truncate">{breadcrumb.join(' → ')}</p>
+                        )}
+                        {!breadcrumb && <p className="text-xs text-gray-400 mb-1">{scriptureTitle}</p>}
                         <h2 className="text-xl font-bold text-[#2d1a0e]" style={{ fontFamily: 'var(--font-display)' }}>
-                            {chapterData
-                                ? `Ch. ${chapterData.chapter.chapter_number}${chapterData.chapter.title ? ` — ${chapterData.chapter.title}` : ''}`
-                                : 'Loading chapter…'}
+                            {heading}
                         </h2>
                     </div>
                     <button onClick={onClose}
@@ -77,22 +83,6 @@ export default function ChapterVersesModal({
                                                 Verse {verse.verse_number}
                                             </span>
                                             <div className="flex items-center gap-1">
-                                                {isLoggedIn && (
-                                                    <button
-                                                        onClick={() => onToggleBookmark(verse.id)}
-                                                        className="w-8 h-8 rounded-full flex items-center justify-center"
-                                                        style={{ background: '#f7f2ea' }}
-                                                        title="Bookmark"
-                                                    >
-                                                        <Bookmark
-                                                            className="w-3.5 h-3.5"
-                                                            style={{
-                                                                color: bookmarks.includes(verse.id) ? '#e07c0a' : '#9c8672',
-                                                                fill: bookmarks.includes(verse.id) ? '#e07c0a' : 'none',
-                                                            }}
-                                                        />
-                                                    </button>
-                                                )}
                                                 <button
                                                     onClick={() => onCopyVerse(verse)}
                                                     className="w-8 h-8 rounded-full flex items-center justify-center"

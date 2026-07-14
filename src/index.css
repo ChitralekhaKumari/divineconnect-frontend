@@ -135,6 +135,48 @@ h6 {
   line-height: 1.2;
 }
 
+/* ─── Wishlist heart + toast animations ──────────────────────────────────── */
+.wishlist-heart-btn {
+  transition: transform 0.15s ease;
+}
+.wishlist-heart-btn:active {
+  transform: scale(0.88);
+}
+@keyframes wishlistHeartPop {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.35); }
+  60%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+.wishlist-heart-pop {
+  animation: wishlistHeartPop 0.35s ease-out;
+}
+@keyframes wishlistToastIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.wishlist-toast {
+  animation: wishlistToastIn 0.22s ease-out;
+}
+@keyframes wishlistRowOut {
+  from { opacity: 1; transform: scale(1); max-height: 300px; }
+  to   { opacity: 0; transform: scale(0.96); max-height: 0; }
+}
+.wishlist-row-leaving {
+  animation: wishlistRowOut 0.25s ease-in forwards;
+  overflow: hidden;
+}
+@keyframes wishlistFadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.wishlist-fade-up {
+  animation: wishlistFadeUp 0.3s ease-out;
+}
+.fade-up-section {
+  animation: wishlistFadeUp 0.3s ease-out;
+}
+
 @utility card {
   background-color: #ffffff;
   border-radius: var(--radius-2xl);

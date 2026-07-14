@@ -1,13 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, Heart, Loader2 } from 'lucide-react';
+import { BookOpen, Loader2 } from 'lucide-react';
 import { scriptureApi } from '../services/scriptureApi';
+import WishlistButton from '../components/WishlistButton';
+
+// Builds the wishlist item shape for a scripture.
+function toWishlistItem(scripture) {
+    return {
+        type: 'scripture',
+        id: scripture.slug,
+        title: scripture.title,
+        subtitle: (scripture.meta_labels || []).join(' · '),
+        meta: { emoji: scripture.emoji, color: scripture.color },
+    };
+}
 
 export default function ScripturesPage() {
     const [scriptures, setScriptures] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [favorites, setFavorites] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -23,29 +34,6 @@ export default function ScripturesPage() {
 
         return () => { cancelled = true; };
     }, []);
-
-    // Load the signed-in user's favorited scriptures, best-effort (guest = skip)
-    useEffect(() => {
-        if (!localStorage.getItem('dc_token')) return;
-        scriptureApi.getFavorites()
-            .then((res) => setFavorites((res.data || []).map((f) => f.slug)))
-            .catch(() => { });
-    }, []);
-
-    const toggleFav = (scriptureSlug, e) => {
-        e.stopPropagation();
-        const isFav = favorites.includes(scriptureSlug);
-        setFavorites((prev) =>
-            isFav ? prev.filter((f) => f !== scriptureSlug) : [...prev, scriptureSlug]
-        );
-        const action = isFav ? scriptureApi.removeFavorite : scriptureApi.addFavorite;
-        action(scriptureSlug).catch(() => {
-            // revert on failure
-            setFavorites((prev) =>
-                isFav ? [...prev, scriptureSlug] : prev.filter((f) => f !== scriptureSlug)
-            );
-        });
-    };
 
     return (
         <div style={{ background: '#fdfaf5', minHeight: '100vh' }}>
@@ -84,7 +72,6 @@ export default function ScripturesPage() {
                 {!loading && !error && scriptures.length > 0 && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {scriptures.map((scripture) => {
-                            const isFav = favorites.includes(scripture.slug);
                             return (
                                 <div
                                     key={scripture.slug}
@@ -111,19 +98,7 @@ export default function ScripturesPage() {
                                         >
                                             {scripture.emoji}
                                         </div>
-                                        <button
-                                            onClick={(e) => toggleFav(scripture.slug, e)}
-                                            className="w-9 h-9 rounded-full flex items-center justify-center transition-colors"
-                                            style={{ background: '#f7f2ea' }}
-                                        >
-                                            <Heart
-                                                className="w-4 h-4"
-                                                style={{
-                                                    color: isFav ? '#e07c0a' : '#9c8672',
-                                                    fill: isFav ? '#e07c0a' : 'none',
-                                                }}
-                                            />
-                                        </button>
+                                        <WishlistButton item={toWishlistItem(scripture)} />
                                     </div>
 
                                     {/* Title */}

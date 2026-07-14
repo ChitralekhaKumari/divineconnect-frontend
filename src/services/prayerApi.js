@@ -6,7 +6,11 @@ async function request(path, params = {}) {
     if (v !== undefined && v !== null && v !== '') url.searchParams.set(k, v);
   });
   const res = await fetch(url.toString());
-  if (!res.ok) throw new Error(`API error ${res.status}`);
+  if (!res.ok) {
+    const err = new Error(`API error ${res.status}`);
+    err.status = res.status;
+    throw err;
+  }
   return res.json();
 }
 
@@ -16,4 +20,7 @@ export const prayerApi = {
 
   /** Distinct deity/category list */
   getCategories: () => request('/prayers/categories'),
+
+  /** Single prayer by slug or id */
+  getBySlug: (slug) => request(`/prayers/${slug}`),
 };

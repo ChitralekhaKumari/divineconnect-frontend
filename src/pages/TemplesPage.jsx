@@ -1,8 +1,21 @@
-import { useState, useEffect, useCallback } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { NavLink, useSearchParams } from 'react-router-dom';
 import { MapPin, Search, Star, Video, Clock, Filter, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import TempleDetailModal from '../components/TempleDetailModal';
+import WishlistButton from '../components/WishlistButton';
 import { templeApi } from '../services/templeApi';
+import { useToast } from '../context/ToastContext';
+
+// Builds the wishlist item shape for a temple.
+function toWishlistItem(temple, img) {
+  return {
+    type: 'temple',
+    id: temple.id,
+    title: temple.name,
+    subtitle: [temple.location_city, temple.location_state].filter(Boolean).join(', '),
+    image: img,
+  };
+}
 
 const TAG_STYLE = { LIVE: '#ef4444', POPULAR: '#e07c0a', FEATURED: '#7c3aed', NEW: '#16a34a' };
 const CATEGORIES = ['All', 'Shiva', 'Devi', 'Other'];
@@ -69,6 +82,44 @@ export default function TemplesPage() {
   function applyCategory(cat) { setActiveCategory(cat); setCurrentPage(1); }
   function applyLive() { setLiveOnly(v => !v); setCurrentPage(1); }
   function applySearch() { setSearch(searchInput); setCurrentPage(1); }
+
+  // Auto-open the item requested via ?open=<id> (e.g. from Wishlist)
+  const [searchParams, setSearchParams] = useSearchParams();
+  const openId = searchParams.get('open');
+  const { showToast } = useToast();
+  const handledOpenId = useRef(null);
+
+  useEffect(() => {
+    if (!openId || handledOpenId.current === openId) return;
+
+    function finish(temple) {
+      handledOpenId.current = openId;
+      if (temple) {
+        const el = document.getElementById(`temple-${temple.id}`);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setSelectedTemple(temple);
+      } else {
+        showToast('This temple could not be found. It may have been removed.', 'error');
+      }
+      setSearchParams((prev) => {
+        const next = new URLSearchParams(prev);
+        next.delete('open');
+        return next;
+      }, { replace: true });
+    }
+
+    const found = temples.find((t) => String(t.id) === String(openId));
+    if (found) {
+      finish(found);
+      return;
+    }
+
+    let cancelled = false;
+    templeApi.getById(openId)
+      .then((res) => { if (!cancelled) finish(res.data); })
+      .catch(() => { if (!cancelled) finish(null); });
+    return () => { cancelled = true; };
+  }, [openId, temples, showToast, setSearchParams]);
 
   return (
     <div style={{ background: '#fdfaf5', minHeight: '100vh' }}>
@@ -215,7 +266,7 @@ export default function TemplesPage() {
 // ─── Temple Card ──────────────────────────────────────────────────────────────
 function TempleCard({ temple, index, onDetails }) {
   return (
-    <div className="bg-white rounded-2xl overflow-hidden group cursor-pointer hover:shadow-xl transition-all duration-300"
+    <div id={`temple-${temple.id}`} className="bg-white rounded-2xl overflow-hidden group cursor-pointer hover:shadow-xl transition-all duration-300"
       style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.07)' }}>
       <div className="relative h-80 overflow-hidden">
         <img src={imgFor(temple, index)} alt={temple.name}
@@ -236,10 +287,17 @@ function TempleCard({ temple, index, onDetails }) {
           </div>
         )}
         {temple.tag === 'LIVE' && (
-          <button className="absolute top-3 right-3 flex items-center gap-1 bg-black/40 backdrop-blur-sm text-white text-[10px] font-semibold px-2.5 py-1 rounded-full hover:bg-black/60 transition-all">
+          <button className="absolute top-3 right-12 flex items-center gap-1 bg-black/40 backdrop-blur-sm text-white text-[10px] font-semibold px-2.5 py-1 rounded-full hover:bg-black/60 transition-all">
             <Video className="w-3 h-3" /> Watch
           </button>
         )}
+        <div className="absolute top-3 right-3">
+          <WishlistButton
+            item={toWishlistItem(temple, imgFor(temple, index))}
+            style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)' }}
+            idleColor="#ffffff"
+          />
+        </div>
         <div className="absolute bottom-0 left-0 right-0 p-4">
           <h3 className="text-white font-bold text-sm leading-tight">{temple.name}</h3>
           <div className="flex items-center gap-1 mt-1">
