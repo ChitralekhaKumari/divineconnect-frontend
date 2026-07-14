@@ -30,10 +30,6 @@ export default function ScriptureDetailPage() {
     const isLoggedIn = !!localStorage.getItem('dc_token');
     const isRamayana = slug === 'ramayana';
 
-    // Grouping only ever runs over the lightweight chapter list (numbers +
-    // titles + verse counts) that's already loaded with the scripture's
-    // metadata — no extra request, and verses for any given Sarga still
-    // only load when that Sarga is actually opened (see openChapter below).
     const kandas = useMemo(
         () => (isRamayana && meta ? groupChaptersByKanda(meta.chapters) : []),
         [isRamayana, meta]

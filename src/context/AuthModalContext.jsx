@@ -4,17 +4,12 @@ import AuthModal from '../components/AuthModal';
 
 const AuthModalContext = createContext(null);
 
-// Wraps the whole app so ANY component — a wishlist heart on Prayers,
-// Scriptures, Temples, or a future module — can ask for login without
-// each one owning its own <AuthModal/> instance.
 export function AuthModalProvider({ children }) {
     const { isLoggedIn } = useAuth();
     const [modalState, setModalState] = useState(null); // null | { screen, message }
     const pendingActionRef = useRef(null);
 
-    // requireAuth(action): if already logged in, runs `action` immediately.
-    // Otherwise opens the login modal and stashes `action` to run right
-    // after a successful login/signup.
+  
     const requireAuth = useCallback((action, message = 'Please sign in to continue') => {
         if (isLoggedIn) {
             action?.();

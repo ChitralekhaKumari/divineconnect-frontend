@@ -1,9 +1,3 @@
-// The Ramayana's 648 chapters (Sargas) are already stored, in order, with
-// titles formatted as "{Kanda Name} · Sarga {n}" (see scriptures/ramayana.md).
-// Nothing about that underlying data changes here — this file only knows
-// how to *group* the existing chapter list the API already returns, so the
-// UI can present it Kanda-by-Kanda instead of one long flat list.
-
 export const KANDA_ORDER = [
     'Bala Kanda',
     'Ayodhya Kanda',
@@ -14,8 +8,7 @@ export const KANDA_ORDER = [
     'Uttara Kanda',
 ];
 
-// Short (1–2 line) descriptions + a card accent — presentational only,
-// doesn't touch the scripture content itself.
+
 export const KANDA_INFO = {
     'Bala Kanda': {
         emoji: '🌱',
@@ -54,8 +47,6 @@ export const KANDA_INFO = {
     },
 };
 
-// Splits a "{Kanda Name} · Sarga {n}" chapter title into its parts.
-// Falls back gracefully if a title doesn't match the expected shape.
 export function parseKandaTitle(title) {
     if (!title) return { kanda: null, sargaLabel: null };
     const parts = title.split('·').map((p) => p.trim());
@@ -63,10 +54,6 @@ export function parseKandaTitle(title) {
     return { kanda: parts[0], sargaLabel: parts[1] };
 }
 
-// Groups a flat chapters[] (as returned by GET /api/scriptures/:slug) into
-// Kanda buckets, in canonical Kanda order. Chapters that don't match a known
-// Kanda name (shouldn't happen, but data is data) are dropped into "Other"
-// at the end, so nothing from the original dataset silently disappears.
 export function groupChaptersByKanda(chapters) {
     const buckets = new Map();
 

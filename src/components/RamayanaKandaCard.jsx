@@ -1,8 +1,5 @@
 import { ArrowRight } from 'lucide-react';
 
-// One Kanda, shown as a clickable card — same visual language as the
-// scripture cards on /scriptures (white bg, soft border, icon chip, hover
-// lift), just scoped to a single Kanda's info + sarga count.
 export default function RamayanaKandaCard({ kanda, onSelect }) {
     const sargaCount = kanda.chapters.length;
 

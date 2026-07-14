@@ -1,6 +1,3 @@
-// src/components/SpiritualCalendar.jsx
-// UI unchanged — data now comes from Google Calendar API via backend.
-
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Bell, Calendar, Moon, Star, Flame, Sun, Loader } from 'lucide-react';
 

@@ -15,7 +15,7 @@ export default function HomePage() {
       <HeroSection />
       <SacredModules />
       <TempleCards />
-      <PujaCards />
+      {/* <PujaCards /> */}
       <PujaTracker />
       <OfferSection />
       <WhyChooseUs />
