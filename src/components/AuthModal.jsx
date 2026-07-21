@@ -3,8 +3,7 @@ import { X, Eye, EyeOff, Loader2, CheckCircle2, ArrowLeft } from 'lucide-react';
 import { authApi } from '../services/authApi';
 import { useAuth } from '../context/AuthContext';
 
-// ─── Screen names ─────────────────────────────────────────────────────────────
-// 'login' | 'signup' | 'verify_email' | 'forgot' | 'otp_reset' | 'reset_pw'
+// ─── Screen names ──────────────────────────────────────────────────────
 
 export default function AuthModal({ onClose, defaultScreen = 'login', redirectMessage }) {
     const { saveSession } = useAuth();
@@ -191,7 +190,7 @@ function LoginScreen({ go, setEmail, saveSession, onClose, loading, setLoading, 
     );
 }
 
-// ─── SIGNUP ───────────────────────────────────────────────────────────────────
+// ─── SIGNUP ──────────────────────────────────────────────
 function SignupScreen({ go, setEmail, loading, setLoading, setError, setSuccess, showPw, setShowPw, showPw2, setShowPw2 }) {
     const [form, setForm] = useState({ full_name: '', email: '', password: '', confirm: '' });
     const f = k => e => setForm(p => ({ ...p, [k]: e.target.value }));

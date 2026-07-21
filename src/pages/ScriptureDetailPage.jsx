@@ -6,6 +6,8 @@ import ChapterVersesModal from '../components/ChapterVersesModal';
 import ItemNotFound from '../components/ItemNotFound';
 import RamayanaKandaCard from '../components/RamayanaKandaCard';
 import { groupChaptersByKanda, parseKandaTitle } from '../utils/ramayanaKandas';
+import MahabharataParvaCard from '../components/MahabharataParvaCard';
+import { groupChaptersByParva, parseParvaTitle } from '../utils/mahabharataParvas';
 import useSmartBack from '../utils/useSmartBack';
 
 export default function ScriptureDetailPage() {
@@ -20,6 +22,9 @@ export default function ScriptureDetailPage() {
     // Ramayana-only: which Kanda's Sarga list is currently open (null = Kanda grid)
     const [selectedKanda, setSelectedKanda] = useState(null);
 
+    // Mahabharata-only: which Parva's Adhyaya list is currently open (null = Parva grid)
+    const [selectedParva, setSelectedParva] = useState(null);
+
     const [chapterNumber, setChapterNumber] = useState(null);
     const [chapterData, setChapterData] = useState(null);
     const [loadingChapter, setLoadingChapter] = useState(false);
@@ -29,10 +34,16 @@ export default function ScriptureDetailPage() {
 
     const isLoggedIn = !!localStorage.getItem('dc_token');
     const isRamayana = slug === 'ramayana';
+    const isMahabharata = slug === 'mahabharata';
 
     const kandas = useMemo(
         () => (isRamayana && meta ? groupChaptersByKanda(meta.chapters) : []),
         [isRamayana, meta]
+    );
+
+    const parvas = useMemo(
+        () => (isMahabharata && meta ? groupChaptersByParva(meta.chapters) : []),
+        [isMahabharata, meta]
     );
 
     // Load book metadata + chapter list once
@@ -42,6 +53,7 @@ export default function ScriptureDetailPage() {
         setError(null);
         setNotFound(false);
         setSelectedKanda(null);
+        setSelectedParva(null);
         scriptureApi.getScripture(slug)
             .then((res) => { if (!cancelled) setMeta(res.data); })
             .catch((err) => {
@@ -109,7 +121,7 @@ export default function ScriptureDetailPage() {
 
     return (
         <div style={{ background: '#fdfaf5', minHeight: '100vh' }}>
-            <div className={`mx-auto px-4 sm:px-6 lg:px-8 py-12 ${isRamayana && !selectedKanda ? 'max-w-6xl' : 'max-w-3xl'}`}>
+            <div className={`mx-auto px-4 sm:px-6 lg:px-8 py-12 ${(isRamayana && !selectedKanda) || (isMahabharata && !selectedParva) ? 'max-w-6xl' : 'max-w-3xl'}`}>
                 <button
                     onClick={goBack}
                     className="flex items-center gap-1.5 text-sm font-medium mb-8 transition-colors"
@@ -157,6 +169,27 @@ export default function ScriptureDetailPage() {
                                     <>
                                         <span>→</span>
                                         <span style={{ color: '#e07c0a' }}>{selectedKanda.name}</span>
+                                    </>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Breadcrumb — Mahabharata only (Scriptures → Mahabharata → Parva) */}
+                        {isMahabharata && (
+                            <div className="flex items-center flex-wrap gap-1 text-xs font-medium mb-8" style={{ color: '#9c8672' }}>
+                                <button onClick={goBack} className="hover:underline" style={{ color: '#9c8672' }}>Scriptures</button>
+                                <span>→</span>
+                                {selectedParva ? (
+                                    <button onClick={() => setSelectedParva(null)} className="hover:underline" style={{ color: '#9c8672' }}>
+                                        {meta.title}
+                                    </button>
+                                ) : (
+                                    <span style={{ color: '#e07c0a' }}>{meta.title}</span>
+                                )}
+                                {selectedParva && (
+                                    <>
+                                        <span>→</span>
+                                        <span style={{ color: '#e07c0a' }}>{selectedParva.name}</span>
                                     </>
                                 )}
                             </div>
@@ -223,8 +256,63 @@ export default function ScriptureDetailPage() {
                             </div>
                         )}
 
+                        {/* ── Mahabharata: Parva cards → Adhyaya list ─────────────────── */}
+                        {isMahabharata && meta.chapters.length > 0 && !selectedParva && (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 fade-up-section">
+                                {parvas.map((parva) => (
+                                    <MahabharataParvaCard key={parva.name} parva={parva} onSelect={setSelectedParva} />
+                                ))}
+                            </div>
+                        )}
+
+                        {isMahabharata && selectedParva && (
+                            <div className="fade-up-section">
+                                <button
+                                    onClick={() => setSelectedParva(null)}
+                                    className="flex items-center gap-1.5 text-sm font-semibold mb-6 transition-colors"
+                                    style={{ color: '#e07c0a' }}
+                                >
+                                    <ArrowLeft className="w-4 h-4" />
+                                    Back to Parvas
+                                </button>
+
+                                <div className="flex items-center gap-3 mb-6">
+                                    <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
+                                        style={{ background: selectedParva.color }}>
+                                        {selectedParva.emoji}
+                                    </div>
+                                    <div>
+                                        <h2 className="text-lg font-bold text-[#2d1a0e]" style={{ fontFamily: 'var(--font-display)' }}>
+                                            {selectedParva.name}
+                                        </h2>
+                                        <p className="text-xs text-gray-400">{selectedParva.chapters.length} Adhyayas</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col gap-4">
+                                    {selectedParva.chapters.map((c) => (
+                                        <button
+                                            key={c.chapter_number}
+                                            onClick={() => openChapter(c.chapter_number)}
+                                            className="w-full flex items-center justify-between gap-4 px-6 sm:px-8 py-5 rounded-full text-left transition-all hover:opacity-90"
+                                            style={{ background: 'linear-gradient(135deg, #f5a742, #e8901f)' }}
+                                        >
+                                            <span className="text-base sm:text-lg font-bold text-white">
+                                                {c.adhyayaLabel || c.title}
+                                            </span>
+                                            <span className="flex items-center gap-1.5 text-sm sm:text-base font-semibold text-white flex-shrink-0"
+                                                style={{ textDecoration: 'underline' }}>
+                                                <ArrowRight className="w-4 h-4" style={{ textDecoration: 'none' }} />
+                                                View Verses
+                                            </span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
                         {/* ── Every other scripture: original flat chapter list, unchanged ── */}
-                        {!isRamayana && meta.chapters.length > 0 && (
+                        {!isRamayana && !isMahabharata && meta.chapters.length > 0 && (
                             <div className="flex flex-col gap-4">
                                 {meta.chapters.map((c) => (
                                     <button
@@ -254,8 +342,16 @@ export default function ScriptureDetailPage() {
             {chapterNumber && (
                 <ChapterVersesModal
                     scriptureTitle={meta?.title}
-                    breadcrumb={isRamayana && selectedKanda ? ['Scriptures', meta?.title, selectedKanda.name] : undefined}
-                    headingOverride={isRamayana && chapterData ? (parseKandaTitle(chapterData.chapter.title).sargaLabel || chapterData.chapter.title) : undefined}
+                    breadcrumb={
+                        isRamayana && selectedKanda ? ['Scriptures', meta?.title, selectedKanda.name]
+                            : isMahabharata && selectedParva ? ['Scriptures', meta?.title, selectedParva.name]
+                                : undefined
+                    }
+                    headingOverride={
+                        isRamayana && chapterData ? (parseKandaTitle(chapterData.chapter.title).sargaLabel || chapterData.chapter.title)
+                            : isMahabharata && chapterData ? (parseParvaTitle(chapterData.chapter.title).adhyayaLabel || chapterData.chapter.title)
+                                : undefined
+                    }
                     chapterData={chapterData}
                     loading={loadingChapter}
                     error={chapterError}
