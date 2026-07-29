@@ -1,8 +1,18 @@
 import { NavLink } from 'react-router-dom';
+import { useToast } from '../context/ToastContext';
 
+// NOTE: There's no dedicated AI Guru page/backend yet, so "Ask AI Guru"
+// surfaces a friendly heads-up instead of linking somewhere unrelated.
+// Point this at the real route once that module ships.
 export default function CTASection() {
+  const { showToast } = useToast();
+
+  function handleAskGuru() {
+    showToast('AI Guru is launching soon — check back shortly!', 'success');
+  }
+
   return (
-    <section className="relative py-20 overflow-hidden" id="cta">
+    <section className="relative py-20 overflow-hidden" id="ai-guru">
       <div className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url('/src/assets/images/cta.jpg')` }} />
       <div className="absolute inset-0"
@@ -18,13 +28,13 @@ export default function CTASection() {
           <span className="text-[rgb(249,187,92)]">Spiritual Companion</span>
         </h2>
         <p className="text-white/70 text-sm sm:text-base max-w-lg mx-auto mb-8 leading-relaxed">
-          Get personalized spiritual guidance powered by AI. Ask questions about sacred texts, puja rituals,
+          Get personalized spiritual guidance powered by AI. Ask questions about sacred texts,
           auspicious timings, and your spiritual path — anytime, anywhere.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <NavLink to="/epuja" className="btn-primary px-8 py-3 justify-center">
-            Talk to AI Guru →
-          </NavLink>
+          <button onClick={handleAskGuru} className="btn-primary px-8 py-3 justify-center">
+            Ask AI Guru →
+          </button>
           <NavLink to="/contact"
             className="font-semibold px-8 py-3 rounded-full border border-white/30 text-white text-sm transition-all duration-200 hover:bg-white/25 justify-center flex items-center"
             style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)' }}>

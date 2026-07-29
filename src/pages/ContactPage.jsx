@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Reveal from '../components/Reveal';
 import { NavLink } from 'react-router-dom';
 import { Mail, Phone, MapPin, Clock, Send, MessageCircle, ChevronDown } from 'lucide-react';
 
@@ -26,8 +27,8 @@ export default function ContactPage() {
     <div style={{ background: '#fdfaf5', minHeight: '100vh' }}>
       <div className="relative py-16 px-4"
         style={{ background: 'linear-gradient(135deg, #2d1a0e 0%, #5c3317 50%, #2d1a0e 100%)' }}>
-        <div className="relative z-10 max-w-2xl mx-auto text-center">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-widest mb-4" style={{ fontFamily: 'var(--font-label)' }}
+        <Reveal as="div" className="relative z-10 max-w-2xl mx-auto text-center">
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-widest mb-4"
             style={{ background: 'rgba(249,187,92,0.2)', color: '#f9bb5c', border: '1px solid rgba(249,187,92,0.3)' }}>
             GET IN TOUCH
           </span>
@@ -38,7 +39,7 @@ export default function ContactPage() {
           <p className="text-white/70 text-sm sm:text-base max-w-lg mx-auto">
             Questions about bookings, pandits, or spiritual guidance? Our team responds within 2 hours.
           </p>
-        </div>
+        </Reveal>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
@@ -48,7 +49,7 @@ export default function ContactPage() {
             <h2 className="section-title mb-6">Send Us a Message</h2>
 
             {submitted ? (
-              <div className="bg-white rounded-2xl p-12 text-center" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
+              <div className="bg-white rounded-2xl p-12 text-center shadow-card-lg">
                 <div className="text-5xl mb-4">🙏</div>
                 <h3 className="text-xl font-semibold text-[#2d1a0e] mb-2" style={{ fontFamily: 'var(--font-display)' }}>
                   Namaste! Message Received
@@ -59,8 +60,7 @@ export default function ContactPage() {
               </div>
             ) : (
               <form onSubmit={handleSubmit}
-                className="bg-white rounded-2xl p-6 sm:p-8 space-y-5"
-                style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
+                className="bg-white rounded-2xl p-6 sm:p-8 space-y-5 shadow-card-lg">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   {[
                     { key: 'name', label: 'Full Name', type: 'text', placeholder: 'Your full name' },
@@ -123,7 +123,7 @@ export default function ContactPage() {
           </div>
 
           <div className="space-y-5">
-            <div className="bg-white rounded-2xl p-6" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
+            <div className="bg-white rounded-2xl p-6 shadow-card-md">
               <h3 className="font-semibold text-[#2d1a0e] text-base mb-5" style={{ fontFamily: 'var(--font-display)' }}>
                 Contact Information
               </h3>
@@ -148,7 +148,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 text-center" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
+            <div className="bg-white rounded-2xl p-6 text-center shadow-card-md">
               <div className="text-3xl mb-3">💬</div>
               <h3 className="font-semibold text-[#2d1a0e] text-sm mb-1">WhatsApp Support</h3>
               <p className="text-xs text-gray-500 mb-4 leading-relaxed">Get instant help from our spiritual support team via WhatsApp — available 7 days a week.</p>
@@ -158,7 +158,7 @@ export default function ContactPage() {
               </button>
             </div>
 
-            <div className="bg-white rounded-2xl p-6" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
+            <div className="bg-white rounded-2xl p-6 shadow-card-md">
               <h3 className="font-semibold text-[#2d1a0e] text-sm mb-4">Quick Links</h3>
               <div className="space-y-2">
                 {[
@@ -184,13 +184,16 @@ export default function ContactPage() {
 
       <div className="py-14 px-4" style={{ background: '#fff' }}>
         <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-10">
-            <span className="section-label">FREQUENTLY ASKED</span>
-            <h2 className="section-title">Common Questions</h2>
-          </div>
+          <Reveal>
+            <div className="text-center mb-10">
+              <span className="section-label">FREQUENTLY ASKED</span>
+              <h2 className="section-title">Common Questions</h2>
+            </div>
+          </Reveal>
           <div className="space-y-3">
             {faqs.map((faq, i) => (
-              <div key={i} className="rounded-2xl overflow-hidden"
+              <Reveal key={i} index={i}>
+              <div className="rounded-2xl overflow-hidden"
                 style={{ border: '1px solid #edd9b3', background: openFaq === i ? '#fff8f0' : '#fff' }}>
                 <button
                   className="w-full text-left px-6 py-4 flex items-center justify-between gap-4 transition-colors"
@@ -208,6 +211,7 @@ export default function ContactPage() {
                   </div>
                 )}
               </div>
+              </Reveal>
             ))}
           </div>
         </div>

@@ -5,6 +5,7 @@ import TempleDetailModal from '../components/TempleDetailModal';
 import WishlistButton from '../components/WishlistButton';
 import { templeApi } from '../services/templeApi';
 import { useToast } from '../context/ToastContext';
+import Reveal from '../components/Reveal';
 
 // Builds the wishlist item shape for a temple.
 function toWishlistItem(temple, img) {
@@ -136,7 +137,7 @@ export default function TemplesPage() {
             backgroundImage: `url('/src/assets/images/hero-temple.jpg')`,
             backgroundSize: 'cover', backgroundPosition: 'center'
           }} />
-        <div className="relative z-10 max-w-3xl mx-auto text-center">
+        <Reveal as="div" className="relative z-10 max-w-3xl mx-auto text-center">
           <span className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-widest mb-4"
             style={{ background: 'rgba(249,187,92,0.2)', color: '#f9bb5c', border: '1px solid rgba(249,187,92,0.3)', fontFamily: 'var(--font-label)' }}>
             SACRED SHRINES
@@ -163,7 +164,7 @@ export default function TemplesPage() {
             </div>
             <button className="btn-primary px-5 text-sm" onClick={applySearch}>Search</button>
           </div>
-        </div>
+        </Reveal>
       </div>
 
       {/* ── Filter Bar ───────────────────────────────────────────────────── */}
@@ -208,8 +209,7 @@ export default function TemplesPage() {
         {loading && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {Array.from({ length: LIMIT }).map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl overflow-hidden animate-pulse"
-                style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.07)' }}>
+              <div key={i} className="bg-white rounded-2xl overflow-hidden animate-pulse shadow-card-lg">
                 <div className="h-52 bg-gray-200" />
                 <div className="p-4 space-y-3">
                   <div className="h-3 bg-gray-200 rounded w-3/4" />
@@ -228,12 +228,13 @@ export default function TemplesPage() {
         {!loading && !error && temples.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {temples.map((temple, idx) => (
-              <TempleCard
-                key={temple.id}
-                temple={temple}
-                index={idx}
-                onDetails={() => setSelectedTemple(temple)}
-              />
+              <Reveal key={temple.id} index={idx} className="h-full">
+                <TempleCard
+                  temple={temple}
+                  index={idx}
+                  onDetails={() => setSelectedTemple(temple)}
+                />
+              </Reveal>
             ))}
           </div>
         )}
@@ -266,8 +267,7 @@ export default function TemplesPage() {
 // ─── Temple Card ──────────────────────────────────────────────────────────────
 function TempleCard({ temple, index, onDetails }) {
   return (
-    <div id={`temple-${temple.id}`} className="bg-white rounded-2xl overflow-hidden group cursor-pointer hover:shadow-xl transition-all duration-300"
-      style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.07)' }}>
+    <div id={`temple-${temple.id}`} className="bg-white rounded-2xl overflow-hidden group cursor-pointer shadow-card-lg">
       <div className="relative h-80 overflow-hidden">
         <img src={imgFor(temple, index)} alt={temple.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"

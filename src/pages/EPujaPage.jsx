@@ -115,8 +115,7 @@ export default function EPujaPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {filtered.map(puja => (
             <div key={puja.id}
-              className="bg-white rounded-2xl overflow-hidden group cursor-pointer hover:shadow-xl transition-all duration-300"
-              style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.07)' }}>
+              className="bg-white rounded-2xl overflow-hidden group cursor-pointer shadow-card-lg">
               <div className="relative h-48 overflow-hidden">
                 <img src={puja.image} alt={puja.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />

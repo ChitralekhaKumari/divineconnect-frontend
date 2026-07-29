@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Reveal from '../components/Reveal';
 import { Star, Clock, Search, MapPin, Phone, Check } from 'lucide-react';
 
 const pandits = [
@@ -33,7 +34,8 @@ export default function PanditsPage() {
         <div className="absolute inset-0 opacity-10"
           style={{ backgroundImage: `url('/src/assets/images/hero-temple.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
         <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-widest mb-4" style={{ fontFamily: 'var(--font-label)' }}
+          <Reveal as="div">
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-widest mb-4"
             style={{ background: 'rgba(249,187,92,0.2)', color: '#f9bb5c', border: '1px solid rgba(249,187,92,0.3)' }}>
             VERIFIED PRIESTS
           </span>
@@ -58,6 +60,7 @@ export default function PanditsPage() {
             </div>
             <button className="btn-primary px-5">Search</button>
           </div>
+          </Reveal>
         </div>
       </div>
 
@@ -81,10 +84,11 @@ export default function PanditsPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {filtered.map(p => (
-            <div key={p.id}
-              className="bg-white rounded-2xl p-5 group hover:shadow-xl transition-all duration-300"
-              style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)', border: '1px solid #f5e8d0' }}>
+          {filtered.map((p, i) => (
+            <Reveal key={p.id} index={i} className="h-full">
+            <div
+              className="bg-white rounded-2xl p-5 group shadow-card-md h-full"
+              style={{ border: '1px solid #f5e8d0' }}>
               <div className="flex items-start gap-3 mb-4">
                 <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
                   style={{ background: p.gradient }}>
@@ -146,6 +150,7 @@ export default function PanditsPage() {
                 </button>
               </div>
             </div>
+            </Reveal>
           ))}
         </div>
 

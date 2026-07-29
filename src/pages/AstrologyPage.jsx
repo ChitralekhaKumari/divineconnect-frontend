@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Star, Moon, Sun, ChevronRight, Clock } from 'lucide-react';
+import Reveal from '../components/Reveal';
 
 const astrologers = [
   { id: 1, name: 'Pt. Rajendra Sharma', speciality: 'Vedic Astrology', experience: '25 yrs', rating: 4.9, sessions: 3200, lang: 'Hindi, English', price: 500, available: true, initial: 'RS', gradient: 'linear-gradient(135deg, #f59b24, #c46206)' },
@@ -36,8 +37,8 @@ export default function AstrologyPage() {
         style={{ background: 'linear-gradient(135deg, #0f0720 0%, #1e0b4a 50%, #0f0720 100%)' }}>
         <div className="absolute inset-0 opacity-20"
           style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(124,58,237,0.4) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(249,187,92,0.3) 0%, transparent 40%)' }} />
-        <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-widest mb-4" style={{ fontFamily: 'var(--font-label)' }}
+        <Reveal as="div" className="relative z-10 max-w-3xl mx-auto text-center">
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-widest mb-4"
             style={{ background: 'rgba(124,58,237,0.3)', color: '#c4b5fd', border: '1px solid rgba(124,58,237,0.4)' }}>
             JYOTISH VIDYA
           </span>
@@ -56,7 +57,7 @@ export default function AstrologyPage() {
               Get Free Kundli
             </button>
           </div>
-        </div>
+        </Reveal>
       </div>
 
       <div className="py-3 overflow-x-auto scrollbar-hide" style={{ background: '#1a0a2e' }}>
@@ -78,15 +79,17 @@ export default function AstrologyPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="text-center mb-10">
-          <span className="section-label">CONSULTATION TYPES</span>
-          <h2 className="section-title">Astrology Services</h2>
-        </div>
+        <Reveal>
+          <div className="text-center mb-10">
+            <span className="section-label">CONSULTATION TYPES</span>
+            <h2 className="section-title">Astrology Services</h2>
+          </div>
+        </Reveal>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {services.map(s => (
-            <div key={s.title}
-              className="bg-white rounded-2xl p-6 cursor-pointer group hover:shadow-lg transition-all duration-300 flex gap-4"
-              style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
+          {services.map((s, i) => (
+            <Reveal key={s.title} index={i} className="h-full">
+            <div
+              className="bg-white rounded-2xl p-6 cursor-pointer group shadow-card-md flex gap-4 h-full">
               <div className="text-3xl flex-shrink-0">{s.icon}</div>
               <div className="flex-1">
                 <h3 className="font-semibold text-[#2d1a0e] text-sm mb-1">{s.title}</h3>
@@ -100,24 +103,28 @@ export default function AstrologyPage() {
                 </div>
               </div>
             </div>
+            </Reveal>
           ))}
         </div>
       </div>
 
       <div style={{ background: '#fff' }} className="py-14 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-10">
-            <span className="section-label">OUR JYOTISHIS</span>
-            <h2 className="section-title">Expert Astrologers</h2>
-            <p className="text-sm text-gray-500 mt-2 max-w-md mx-auto">
-              Connect with verified, experienced astrologers for personalized Vedic guidance.
-            </p>
-          </div>
+          <Reveal>
+            <div className="text-center mb-10">
+              <span className="section-label">OUR JYOTISHIS</span>
+              <h2 className="section-title">Expert Astrologers</h2>
+              <p className="text-sm text-gray-500 mt-2 max-w-md mx-auto">
+                Connect with verified, experienced astrologers for personalized Vedic guidance.
+              </p>
+            </div>
+          </Reveal>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {astrologers.map(a => (
-              <div key={a.id}
-                className="bg-white rounded-2xl p-5 text-center group hover:shadow-xl transition-all duration-300"
-                style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)', border: '1px solid #f5e8d0' }}>
+            {astrologers.map((a, i) => (
+              <Reveal key={a.id} index={i} className="h-full">
+              <div
+                className="bg-white rounded-2xl p-5 text-center group shadow-card-md h-full"
+                style={{ border: '1px solid #f5e8d0' }}>
                 <div className="relative w-16 h-16 mx-auto mb-4">
                   <div className="w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-lg"
                     style={{ background: a.gradient }}>
@@ -151,6 +158,7 @@ export default function AstrologyPage() {
                   {a.available ? 'Book Session' : 'Unavailable'}
                 </button>
               </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -163,7 +171,7 @@ export default function AstrologyPage() {
             <h2 className="section-title">Generate Your Birth Chart</h2>
             <p className="text-sm text-gray-500 mt-2">Enter your birth details for an instant free kundli analysis.</p>
           </div>
-          <div className="bg-white rounded-2xl p-6 sm:p-8" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
+          <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-card-lg">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               {[
                 { label: 'Full Name', placeholder: 'Your full name', type: 'text' },

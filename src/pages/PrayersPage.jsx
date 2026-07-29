@@ -5,6 +5,7 @@ import { prayerApi } from '../services/prayerApi';
 import PrayerDetailModal from '../components/PrayerDetailModal';
 import WishlistButton from '../components/WishlistButton';
 import { useToast } from '../context/ToastContext';
+import Reveal from '../components/Reveal';
 
 const CATEGORIES = ['All', 'Ganesha', 'Shiva', 'Vishnu', 'Rama', 'Durga', 'Lakshmi', 'Saraswati', 'Surya', 'Hanuman', 'Savitri', 'Navagraha', 'Universal', 'Gita'];
 
@@ -84,14 +85,16 @@ export default function PrayersPage() {
     <div style={{ background: '#fdfaf5', minHeight: '100vh' }}>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
-        <span className="section-label">SACRED TEXTS</span>
-        <h1 className="text-4xl sm:text-5xl font-bold text-[#2d1a0e] mt-2 mb-3"
-          style={{ fontFamily: 'var(--font-display)' }}>
-          Prayer Book
-        </h1>
-        <p className="text-sm sm:text-base text-gray-500 max-w-xl">
-          A collection of powerful mantras and prayers for daily devotion.
-        </p>
+        <Reveal>
+          <span className="section-label">SACRED TEXTS</span>
+          <h1 className="text-4xl sm:text-5xl font-bold text-[#2d1a0e] mt-2 mb-3"
+            style={{ fontFamily: 'var(--font-display)' }}>
+            Prayer Book
+          </h1>
+          <p className="text-sm sm:text-base text-gray-500 max-w-xl">
+            A collection of powerful mantras and prayers for daily devotion.
+          </p>
+        </Reveal>
 
         {/* Category filter pills */}
         <div className="flex flex-wrap gap-2.5 mt-8 mb-8">
@@ -125,10 +128,11 @@ export default function PrayersPage() {
         {/* Prayer list */}
         {!loading && !error && (
           <div className="flex flex-col gap-4">
-            {prayers.map((prayer) => (
-              <div key={prayer.id} id={`prayer-${prayer.slug || prayer.id}`}
-                className="bg-white rounded-2xl transition-all duration-300"
-                style={{ border: '1px solid #f5e8d0', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+            {prayers.map((prayer, i) => (
+              <Reveal key={prayer.id} index={i}>
+              <div id={`prayer-${prayer.slug || prayer.id}`}
+                className="bg-white rounded-2xl shadow-card-md"
+                style={{ border: '1px solid #f5e8d0' }}>
 
                 {/* Header row */}
                 <button onClick={() => setSelectedPrayer(prayer)}
@@ -153,6 +157,7 @@ export default function PrayersPage() {
                   </div>
                 </button>
               </div>
+              </Reveal>
             ))}
           </div>
         )}

@@ -9,16 +9,8 @@ export default function RamayanaKandaCard({ kanda, onSelect }) {
             tabIndex={0}
             onClick={() => onSelect(kanda)}
             onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onSelect(kanda)}
-            className="bg-white rounded-2xl p-6 cursor-pointer transition-all duration-300"
-            style={{ border: '1px solid #f5e8d0', boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}
-            onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 8px 30px rgba(0,0,0,0.12)';
-                e.currentTarget.style.transform = 'translateY(-2px)';
-            }}
-            onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.05)';
-                e.currentTarget.style.transform = 'translateY(0)';
-            }}
+            className="bg-white rounded-2xl p-6 cursor-pointer shadow-card-md"
+            style={{ border: '1px solid #f5e8d0' }}
         >
             <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4"
                 style={{ background: kanda.color }}>

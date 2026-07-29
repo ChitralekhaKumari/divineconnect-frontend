@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BookOpen, Loader2 } from 'lucide-react';
 import { scriptureApi } from '../services/scriptureApi';
+import Reveal from '../components/Reveal';
 import WishlistButton from '../components/WishlistButton';
 
 // Builds the wishlist item shape for a scripture.
@@ -40,17 +41,19 @@ export default function ScripturesPage() {
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
                 {/* Page Header */}
-                <span className="section-label">SACRED KNOWLEDGE</span>
-                <h1
-                    className="text-4xl sm:text-5xl font-bold text-[#2d1a0e] mt-2 mb-3"
-                    style={{ fontFamily: 'var(--font-display)' }}
-                >
-                    Scriptures
-                </h1>
-                <p className="text-sm sm:text-base text-gray-500 max-w-xl mb-10">
-                    Explore the timeless wisdom of Hindu sacred texts —{' '}
-                    <span style={{ color: '#e07c0a' }}>the foundation of Dharma.</span>
-                </p>
+                <Reveal>
+                    <span className="section-label">SACRED KNOWLEDGE</span>
+                    <h1
+                        className="text-4xl sm:text-5xl font-bold text-[#2d1a0e] mt-2 mb-3"
+                        style={{ fontFamily: 'var(--font-display)' }}
+                    >
+                        Scriptures
+                    </h1>
+                    <p className="text-sm sm:text-base text-gray-500 max-w-xl mb-10">
+                        Explore the timeless wisdom of Hindu sacred texts —{' '}
+                        <span style={{ color: '#e07c0a' }}>the foundation of Dharma.</span>
+                    </p>
+                </Reveal>
 
                 {/* States */}
                 {loading && (
@@ -70,25 +73,16 @@ export default function ScripturesPage() {
 
                 {/* Scripture Cards Grid */}
                 {!loading && !error && scriptures.length > 0 && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {scriptures.map((scripture) => {
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
+                        {scriptures.map((scripture, i) => {
                             return (
+                                <Reveal key={scripture.slug} index={i} className="h-full">
                                 <div
-                                    key={scripture.slug}
-                                    className="bg-white rounded-2xl p-6 cursor-pointer transition-all duration-300"
+                                    className="bg-white rounded-2xl p-6 cursor-pointer h-full flex flex-col shadow-card-md"
                                     style={{
                                         border: '1px solid #f5e8d0',
-                                        boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
                                     }}
                                     onClick={() => navigate(`/scriptures/${scripture.slug}`)}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.boxShadow = '0 8px 30px rgba(0,0,0,0.12)';
-                                        e.currentTarget.style.transform = 'translateY(-2px)';
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.05)';
-                                        e.currentTarget.style.transform = 'translateY(0)';
-                                    }}
                                 >
                                     {/* Top Row: Icon + Favorite */}
                                     <div className="flex items-start justify-between mb-4">
@@ -103,23 +97,23 @@ export default function ScripturesPage() {
 
                                     {/* Title */}
                                     <h3
-                                        className="text-xl font-semibold text-[#2d1a0e] mb-2"
+                                        className="text-xl font-semibold text-[#2d1a0e] mb-2 line-clamp-2"
                                         style={{ fontFamily: 'var(--font-display)' }}
                                     >
                                         {scripture.title}
                                     </h3>
 
                                     {/* Description */}
-                                    <p className="text-sm text-gray-500 leading-relaxed mb-4">
+                                    <p className="text-sm text-gray-500 leading-relaxed mb-4 line-clamp-3">
                                         {scripture.description}
                                     </p>
 
                                     {/* Meta Tags */}
-                                    <div className="flex flex-wrap gap-2 mb-5">
+                                    <div className="flex flex-wrap gap-2 mb-5 overflow-hidden" style={{ maxHeight: '34px' }}>
                                         {(scripture.meta_labels || []).map((tag) => (
                                             <span
                                                 key={tag}
-                                                className="text-xs px-3 py-1 rounded-full font-medium"
+                                                className="text-xs px-3 py-1 rounded-full font-medium whitespace-nowrap"
                                                 style={{
                                                     background: '#f5f0e8',
                                                     color: '#6b5b4d',
@@ -137,7 +131,7 @@ export default function ScripturesPage() {
                                             e.stopPropagation();
                                             navigate(`/scriptures/${scripture.slug}`);
                                         }}
-                                        className="flex items-center gap-1.5 text-sm font-semibold transition-colors"
+                                        className="flex items-center gap-1.5 text-sm font-semibold transition-colors mt-auto"
                                         style={{ color: '#e07c0a' }}
                                         onMouseEnter={(e) => (e.currentTarget.style.color = '#c46206')}
                                         onMouseLeave={(e) => (e.currentTarget.style.color = '#e07c0a')}
@@ -146,6 +140,7 @@ export default function ScripturesPage() {
                                         Read Now →
                                     </button>
                                 </div>
+                                </Reveal>
                             );
                         })}
                     </div>

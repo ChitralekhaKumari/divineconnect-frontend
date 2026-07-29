@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Heart, BookOpen, Landmark, ScrollText, Trash2, Loader2 } from 'lucide-react';
 import { useWishlist } from '../context/WishlistContext';
+import Reveal from '../components/Reveal';
 
 // prayer/temple open a modal on their list page, scripture has its own page
 const SECTION_META = {
@@ -54,14 +55,16 @@ export default function WishlistPage() {
         <div style={{ background: '#fdfaf5', minHeight: '100vh' }}>
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
-                <span className="section-label">SAVED FOR LATER</span>
-                <h1 className="text-4xl sm:text-5xl font-bold text-[#2d1a0e] mt-2 mb-3"
-                    style={{ fontFamily: 'var(--font-display)' }}>
-                    My Wishlist
-                </h1>
-                <p className="text-sm sm:text-base text-gray-500 max-w-xl mb-8">
-                    All your favorite prayers, scriptures, and temples, saved in one place.
-                </p>
+                <Reveal>
+                    <span className="section-label">SAVED FOR LATER</span>
+                    <h1 className="text-4xl sm:text-5xl font-bold text-[#2d1a0e] mt-2 mb-3"
+                        style={{ fontFamily: 'var(--font-display)' }}>
+                        My Wishlist
+                    </h1>
+                    <p className="text-sm sm:text-base text-gray-500 max-w-xl mb-8">
+                        All your favorite prayers, scriptures, and temples, saved in one place.
+                    </p>
+                </Reveal>
 
                 {loading && (
                     <div className="flex items-center justify-center py-16 text-gray-400 gap-2">
@@ -112,15 +115,15 @@ export default function WishlistPage() {
                             </div>
 
                             <div className="flex flex-col gap-3">
-                                {groups[type].map((item) => {
+                                {groups[type].map((item, i) => {
                                     const k = `${item.item_type}:${item.item_id}`;
                                     const leaving = removingKey === k;
                                     return (
+                                        <Reveal key={k} index={i}>
                                         <div
-                                            key={k}
                                             onClick={() => handleOpen(item)}
-                                            className={`bg-white rounded-2xl flex items-center gap-4 px-5 py-4 cursor-pointer transition-shadow hover:shadow-md ${leaving ? 'wishlist-row-leaving' : ''}`}
-                                            style={{ border: '1px solid #f5e8d0', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}
+                                            className={`bg-white rounded-2xl flex items-center gap-4 px-5 py-4 cursor-pointer shadow-card-sm ${leaving ? 'wishlist-row-leaving' : ''}`}
+                                            style={{ border: '1px solid #f5e8d0' }}
                                         >
                                             {item.image_url ? (
                                                 <img src={item.image_url} alt={item.title}
@@ -148,6 +151,7 @@ export default function WishlistPage() {
                                                 <Trash2 className="w-4 h-4" style={{ color: '#c0392b' }} />
                                             </button>
                                         </div>
+                                        </Reveal>
                                     );
                                 })}
                             </div>

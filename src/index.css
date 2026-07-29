@@ -32,9 +32,26 @@
   --color-temple-gold: #c9882a;
   --color-temple-amber: #e8a635;
 
-  /* Custom shadows */
-  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.08);
-  --shadow-card-hover: 0 8px 30px rgba(0, 0, 0, 0.14);
+  /* ─── Layered card shadows ──────────────────────────────────────────────
+     Each tier stacks a tight "contact" shadow (grounds the card) with a
+     soft, wider "ambient" shadow (creates the floating depth). Both use a
+     warm temple-brown tint instead of flat black, so the shadow reads as
+     part of the same palette rather than a generic UI gray. Sized by card
+     footprint: sm = compact list items (bhajans, artifacts, tags), md = the
+     most common card size (temples-on-home, prayers, pandits, scriptures),
+     lg = big single-panel or hero-adjacent cards. */
+  --shadow-card-sm: 0 1px 2px rgba(45, 26, 14, 0.05), 0 4px 10px rgba(45, 26, 14, 0.06);
+  --shadow-card-sm-hover: 0 2px 4px rgba(45, 26, 14, 0.06), 0 10px 22px rgba(45, 26, 14, 0.10);
+
+  --shadow-card-md: 0 1px 3px rgba(45, 26, 14, 0.06), 0 6px 18px rgba(45, 26, 14, 0.08);
+  --shadow-card-md-hover: 0 3px 6px rgba(45, 26, 14, 0.07), 0 14px 32px rgba(45, 26, 14, 0.13);
+
+  --shadow-card-lg: 0 2px 4px rgba(45, 26, 14, 0.06), 0 12px 32px rgba(45, 26, 14, 0.10);
+  --shadow-card-lg-hover: 0 6px 12px rgba(45, 26, 14, 0.08), 0 22px 50px rgba(45, 26, 14, 0.15);
+
+  /* Kept for anything still referencing the old flat tokens directly. */
+  --shadow-card: var(--shadow-card-md);
+  --shadow-card-hover: var(--shadow-card-md-hover);
   --shadow-saffron: 0 4px 20px rgba(224, 124, 10, 0.3);
 
   /* Custom border radius */
@@ -177,13 +194,78 @@ h6 {
   animation: wishlistFadeUp 0.3s ease-out;
 }
 
+/* ─── Scroll reveal (fade + slide up from bottom, once) ──────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  /* Both properties share the same high-quality decelerate curve
+     (cubic-bezier(0.22, 1, 0.36, 1) — a continuous ease-out with no
+     overshoot, so the motion glides to a stop rather than snapping).
+     Opacity still resolves a little ahead of transform so content becomes
+     readable just before the slide fully settles — that's what keeps
+     1.2s+ from reading as slow/sluggish: there's always something visibly
+     still in motion for the full duration, not a static fade sitting idle.
+     Only opacity/transform are animated (GPU-composited, no layout or
+     paint work), which keeps this smooth at 60fps even with many cards
+     animating in on lower-powered devices. */
+  transition-property: opacity, transform;
+  transition-duration: 1200ms, 1400ms;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 @utility card {
   background-color: #ffffff;
   border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-card-md);
   transition: box-shadow 0.3s ease, transform 0.3s ease;
 
   &:hover {
-    box-shadow: var(--shadow-card-hover);
+    box-shadow: var(--shadow-card-md-hover);
+    transform: translateY(-2px);
+  }
+}
+
+/* Compact cards: bhajan tiles, artifact tiles, tags, small list items.
+   Shadow-only on hover — no lift, so dense grids don't feel jittery. */
+@utility shadow-card-sm {
+  box-shadow: var(--shadow-card-sm);
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: var(--shadow-card-sm-hover);
+  }
+}
+
+/* The most common card size: temple/prayer/pandit/scripture cards. */
+@utility shadow-card-md {
+  box-shadow: var(--shadow-card-md);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    box-shadow: var(--shadow-card-md-hover);
+    transform: translateY(-3px);
+  }
+}
+
+/* Large single-panel cards: big feature panels, hero-adjacent cards. */
+@utility shadow-card-lg {
+  box-shadow: var(--shadow-card-lg);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    box-shadow: var(--shadow-card-lg-hover);
+    transform: translateY(-4px);
   }
 }
