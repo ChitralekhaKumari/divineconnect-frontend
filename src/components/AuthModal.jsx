@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { X, Eye, EyeOff, Loader2, CheckCircle2, ArrowLeft } from 'lucide-react';
 import { authApi } from '../services/authApi';
 import { useAuth } from '../context/AuthContext';
+import { validatePassword } from '../utils/passwordValidator';
 
 // ─── Screen names ──────────────────────────────────────────────────────
 
@@ -198,6 +199,8 @@ function SignupScreen({ go, setEmail, loading, setLoading, setError, setSuccess,
     async function submit(e) {
         e.preventDefault();
         setError(''); setSuccess('');
+        const passwordCheck = validatePassword(form.password);
+        if (!passwordCheck.valid) return setError(passwordCheck.message);
         if (form.password !== form.confirm) return setError('Passwords do not match.');
         setLoading(true);
         try {
@@ -219,7 +222,7 @@ function SignupScreen({ go, setEmail, loading, setLoading, setError, setSuccess,
             <p className="text-center text-sm text-gray-500 mb-5">Create your sacred account</p>
             <Input label="Full Name" value={form.full_name} onChange={f('full_name')} placeholder="Your full name" />
             <Input label="Email" type="email" value={form.email} onChange={f('email')} placeholder="you@example.com" />
-            <Input label="Password" type={showPw ? 'text' : 'password'} value={form.password} onChange={f('password')} placeholder="Min. 6 characters"
+            <Input label="Password" type={showPw ? 'text' : 'password'} value={form.password} onChange={f('password')} placeholder="Min. 6 chars, not all numbers"
                 right={{ onClick: () => setShowPw(v => !v), icon: showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" /> }} />
             <Input label="Confirm Password" type={showPw2 ? 'text' : 'password'} value={form.confirm} onChange={f('confirm')} placeholder="Repeat password"
                 right={{ onClick: () => setShowPw2(v => !v), icon: showPw2 ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" /> }} />
@@ -390,6 +393,8 @@ function ResetPwScreen({ go, resetToken, loading, setLoading, setError, setSucce
 
     async function submit(e) {
         e.preventDefault();
+        const passwordCheck = validatePassword(form.password);
+        if (!passwordCheck.valid) return setError(passwordCheck.message);
         if (form.password !== form.confirm) return setError('Passwords do not match.');
         setError(''); setSuccess(''); setLoading(true);
         try {
@@ -403,7 +408,7 @@ function ResetPwScreen({ go, resetToken, loading, setLoading, setError, setSucce
     return (
         <form onSubmit={submit}>
             <p className="text-center text-sm text-gray-500 mb-5">Choose a new password</p>
-            <Input label="New Password" type={showPw ? 'text' : 'password'} value={form.password} onChange={f('password')} placeholder="Min. 6 characters"
+            <Input label="New Password" type={showPw ? 'text' : 'password'} value={form.password} onChange={f('password')} placeholder="Min. 6 chars, not all numbers"
                 right={{ onClick: () => setShowPw(v => !v), icon: showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" /> }} />
             <Input label="Confirm Password" type="password" value={form.confirm} onChange={f('confirm')} placeholder="Repeat password" />
             <SubmitBtn loading={loading}>Reset Password</SubmitBtn>

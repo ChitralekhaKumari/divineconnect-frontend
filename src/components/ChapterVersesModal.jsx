@@ -64,7 +64,9 @@ export default function ChapterVersesModal({
                         <>
                             {chapterData.verses.length === 0 && (
                                 <div className="text-center py-12 text-sm text-gray-400">
-                                    Verses for this chapter are being added soon.
+                                    {chapterData.verses.some?.((v) => v.is_sukta)
+                                        ? 'Suktas for this chapter are being added soon.'
+                                        : 'Verses for this chapter are being added soon.'}
                                 </div>
                             )}
 
@@ -76,12 +78,22 @@ export default function ChapterVersesModal({
                                         style={{ background: '#fdfaf5', border: '1px solid #f5e8d0' }}
                                     >
                                         <div className="flex items-start justify-between mb-3">
-                                            <span
-                                                className="text-xs font-semibold px-3 py-1 rounded-full inline-block"
-                                                style={{ background: '#f5f0e8', color: '#6b5b4d', border: '1px solid #edd9b3' }}
-                                            >
-                                                Verse {verse.verse_number}
-                                            </span>
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                                <span
+                                                    className="text-xs font-semibold px-3 py-1 rounded-full inline-block"
+                                                    style={{ background: '#f5f0e8', color: '#6b5b4d', border: '1px solid #edd9b3' }}
+                                                >
+                                                    {verse.is_sukta ? `Sukta ${verse.verse_number}` : `Verse ${verse.verse_number}`}
+                                                </span>
+                                                {verse.is_sukta && verse.mantra_count != null && (
+                                                    <span
+                                                        className="text-[11px] font-medium px-2.5 py-1 rounded-full inline-block"
+                                                        style={{ background: '#fff8e1', color: '#a5750f', border: '1px solid #f0e0ae' }}
+                                                    >
+                                                        {verse.mantra_count} mantra{verse.mantra_count === 1 ? '' : 's'}
+                                                    </span>
+                                                )}
+                                            </div>
                                             <div className="flex items-center gap-1">
                                                 <button
                                                     onClick={() => onCopyVerse(verse)}
@@ -104,23 +116,51 @@ export default function ChapterVersesModal({
                                             </div>
                                         </div>
 
-                                        {verse.sanskrit && (
-                                            <p
-                                                className="text-lg mb-3 leading-relaxed"
-                                                style={{ color: '#2d1a0e', fontFamily: 'var(--font-display)', whiteSpace: 'pre-line' }}
-                                            >
-                                                {verse.sanskrit}
-                                            </p>
+                                        {verse.is_sukta && verse.sanskrit ? (
+                                            // Suktas hold multiple mantra lines (joined by a blank line) —
+                                            // render each as its own numbered stanza rather than one block.
+                                            <ol className="mb-1 space-y-2.5 list-none">
+                                                {verse.sanskrit.split('\n\n').map((mantra, idx) => (
+                                                    <li key={idx} className="flex gap-2.5">
+                                                        <span
+                                                            className="text-xs font-semibold flex-shrink-0 mt-1.5"
+                                                            style={{ color: '#c9882a' }}
+                                                        >
+                                                            {idx + 1}
+                                                        </span>
+                                                        <p
+                                                            className="text-lg leading-relaxed"
+                                                            style={{ color: '#2d1a0e', fontFamily: 'var(--font-display)' }}
+                                                        >
+                                                            {mantra}
+                                                        </p>
+                                                    </li>
+                                                ))}
+                                            </ol>
+                                        ) : (
+                                            verse.sanskrit && (
+                                                <p
+                                                    className="text-lg mb-3 leading-relaxed"
+                                                    style={{ color: '#2d1a0e', fontFamily: 'var(--font-display)', whiteSpace: 'pre-line' }}
+                                                >
+                                                    {verse.sanskrit}
+                                                </p>
+                                            )
                                         )}
                                         {verse.transliteration && (
-                                            <p className="text-sm italic text-gray-400 mb-3" style={{ whiteSpace: 'pre-line' }}>{verse.transliteration}</p>
+                                            <p className="text-sm italic text-gray-400 mb-3 mt-3" style={{ whiteSpace: 'pre-line' }}>{verse.transliteration}</p>
                                         )}
                                         {verse.english && (
-                                            <p className="text-sm text-gray-600 leading-relaxed">{verse.english}</p>
+                                            <p className="text-sm text-gray-600 leading-relaxed mt-3">{verse.english}</p>
                                         )}
                                         {verse.hindi && (
                                             <p className="text-sm text-gray-600 leading-relaxed mt-2 pt-2" style={{ borderTop: '1px dashed #edd9b3' }}>
                                                 {verse.hindi}
+                                            </p>
+                                        )}
+                                        {verse.is_sukta && verse.summary && (
+                                            <p className="text-xs text-gray-400 mt-3 pt-2" style={{ borderTop: '1px dashed #edd9b3' }}>
+                                                {verse.summary}
                                             </p>
                                         )}
                                     </div>

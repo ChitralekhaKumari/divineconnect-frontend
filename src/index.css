@@ -225,6 +225,26 @@ h6 {
   }
 }
 
+/* ─── Coming Soon modal entrance (fade + slide up) ───────────────────────── */
+@keyframes comingSoonModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.coming-soon-modal {
+  animation: comingSoonModalIn 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .coming-soon-modal {
+    animation: none;
+  }
+}
+
 @utility card {
   background-color: #ffffff;
   border-radius: var(--radius-2xl);

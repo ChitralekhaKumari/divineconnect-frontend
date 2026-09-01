@@ -1,23 +1,15 @@
 import { NavLink } from 'react-router-dom';
 import Reveal from './Reveal';
 
-// Background photo per request — hosted externally, referenced directly by
-// URL (same pattern as any other external image in this app, e.g. the
-// placehold.co covers in the bhajans seed data). Nothing to download: the
-// visitor's browser fetches it at render time, same as it would for any
-// other <img>/background-image URL.
 const BG_IMAGE_URL = 'https://puja-plus-connect.lovable.app/assets/ai-guru-bg-B20UcBAf.jpg';
 
 export default function AstrologySection() {
   return (
     <section className="relative py-20 overflow-hidden" id="astrology-cta">
-      {/* Background photo — no decorative stars/zodiac glyphs layered on
-          top, just the image itself. */}
+   
       <div className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url('${BG_IMAGE_URL}')` }} />
-      {/* Dark overlay kept at a low, single flat tint — only enough for the
-          white text to stay readable against the photo, not a decorative
-          gradient effect. */}
+      
       <div className="absolute inset-0" style={{ background: 'rgba(15,7,32,0.55)' }} />
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center">

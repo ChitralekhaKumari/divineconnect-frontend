@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { CalendarDays } from 'lucide-react';
 
-// Same base-URL handling as CalendarPreview.jsx / SpiritualCalendar.jsx, so
-// this hits the exact same backend the full Calendar page uses.
 const RAW_API = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 const API = RAW_API.replace(/\/api\/?$/, '');
 
@@ -27,9 +25,6 @@ function formatDate(festivalDateStr) {
   });
 }
 
-// No `className` prop for the outer wrapper on purpose — callers (Hero,
-// AstrologySection) each wrap this in their own <Reveal> with their own
-// max-width, so the fade-up animation and layout stay under their control.
 export default function UpcomingFestivalCard() {
   const [festival, setFestival] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -44,8 +39,6 @@ export default function UpcomingFestivalCard() {
     return () => { cancelled = true; };
   }, []);
 
-  // Nothing to show yet, or the fetch failed — better to render nothing
-  // than to show stale/incorrect festival info.
   if (loading) {
     return (
       <div className="bg-white/70 backdrop-blur-sm border border-[#e8d5b0] rounded-2xl px-6 py-4 h-[76px] animate-pulse"

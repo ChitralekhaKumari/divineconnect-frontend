@@ -5,15 +5,6 @@ import { templeApi } from '../services/templeApi';
 import WishlistButton from './WishlistButton';
 import Reveal from './Reveal';
 
-// This card is an exact copy of the `TempleCard` component on the full
-// Temples page (src/pages/TemplesPage.jsx) — same markup, same classes,
-// same image height (h-80), same badges/rating/timings row, same
-// "View Details" button — so temple cards look identical wherever they
-// appear. Only the click behavior differs: the Temples page opens a local
-// modal, this navigates to `/temples?open={id}`, which opens that exact
-// same modal on arrival (the Temples page already supports that query
-// param). If TemplesPage.jsx's card design changes, mirror the change here.
-
 const TAG_STYLE = { LIVE: '#ef4444', POPULAR: '#e07c0a', FEATURED: '#7c3aed', NEW: '#16a34a' };
 
 const PLACEHOLDER_IMAGES = [

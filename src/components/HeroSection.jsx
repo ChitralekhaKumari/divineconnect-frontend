@@ -24,7 +24,7 @@ export default function HeroSection() {
             style={{ fontFamily: 'var(--font-display)', color: '#2d1a0e' }}>
             Where Faith
             <br />
-            <span style={{ color: '#c9882a' }}>Meets Technology</span>
+            <span style={{ color: 'rgb(102 61 2)' }}>Meets Technology</span>
           </h1>
         </Reveal>
 

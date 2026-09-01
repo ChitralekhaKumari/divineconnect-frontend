@@ -14,7 +14,6 @@ export default function TempleDetailModal({ temple, onClose }) {
     setError(null);
     setDetails(null);
 
-    // If temple already has full details from the DB, use them directly
     if (temple.history && temple.full_address) {
       setDetails(normalise(temple));
       setLoading(false);
@@ -110,7 +109,7 @@ export default function TempleDetailModal({ temple, onClose }) {
                   <p className="text-sm text-gray-600 leading-relaxed">{details.famous_for}</p>
                 </Section>
               )}
-
+              
               {details.history && (
                 <Section icon={<Info className="w-4 h-4" />} title="History & Significance">
                   <p className="text-sm text-gray-600 leading-relaxed">{details.history}</p>
@@ -130,8 +129,6 @@ export default function TempleDetailModal({ temple, onClose }) {
               <Section icon={<Clock className="w-4 h-4" />} title="Temple Timings">
                 <div className="space-y-1.5 text-sm">
                   <Row label="General Hours" value={details.timings_general} />
-                  {/* <Row label="Morning Aarti" value={details.timings_morning_aarti} /> */}
-                  {/* <Row label="Evening Aarti" value={details.timings_evening_aarti} /> */}
                   <Row label="Closed On" value={details.timings_closed_on} />
                 </div>
               </Section>
@@ -197,10 +194,6 @@ export default function TempleDetailModal({ temple, onClose }) {
 
               {/* CTA */}
               <div className="flex gap-3 pt-2">
-                {/* <button className="flex-1 py-3 rounded-full text-sm font-bold text-white transition-all hover:opacity-90"
-                  style={{ background: 'linear-gradient(135deg, #e07c0a, #c9882a)' }}>
-                  Book Puja
-                </button> */}
                 <button onClick={onClose}
                   className="px-6 py-3 rounded-full text-sm font-semibold border border-[#e8d5b0] text-white  hover:bg-[#e47b02] transition-all cursor-pointer"
                   style={{ background: 'linear-gradient(135deg, #e07c0a, #c9882a)' }}>
