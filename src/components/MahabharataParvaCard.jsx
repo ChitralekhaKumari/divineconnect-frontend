@@ -1,46 +1,23 @@
-import { ArrowRight } from 'lucide-react';
+import ScriptureChapterCard from './ScriptureChapterCard';
 
+/**
+ * MahabharataParvaCard — one Parva tile in the "Choose a Parva" grid.
+ * Renders through the same ScriptureChapterCard used for Bhagavad Gita's
+ * chapter grid, so every book in the Scriptures section shares one card
+ * design.
+ */
 export default function MahabharataParvaCard({ parva, onSelect }) {
     const chapterCount = parva.chapters.length;
+    const bookMatch = parva.bookLabel && parva.bookLabel.match(/Book (\d+)/);
 
     return (
-        <div
-            role="button"
-            tabIndex={0}
-            onClick={() => onSelect(parva)}
-            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onSelect(parva)}
-            className="bg-white rounded-2xl p-6 cursor-pointer shadow-card-md"
-            style={{ border: '1px solid #f5e8d0' }}
-        >
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4"
-                style={{ background: parva.color }}>
-                {parva.emoji}
-            </div>
-
-            <h3 className="text-xl font-semibold text-[#2d1a0e] mb-2"
-                style={{ fontFamily: 'var(--font-display)' }}>
-                {parva.name}
-            </h3>
-
-            {parva.bookLabel && (
-                <p className="text-xs text-gray-400 mb-3">{parva.bookLabel}</p>
-            )}
-
-            <div className="flex items-center justify-between mt-4">
-                <span className="text-xs px-3 py-1 rounded-full font-medium"
-                    style={{ background: '#f5f0e8', color: '#6b5b4d', border: '1px solid #edd9b3' }}>
-                    {chapterCount} Adhyaya{chapterCount === 1 ? '' : 's'}
-                </span>
-
-                <button
-                    onClick={(e) => { e.stopPropagation(); onSelect(parva); }}
-                    className="flex items-center gap-1.5 text-sm font-semibold transition-colors"
-                    style={{ color: '#e07c0a' }}
-                >
-                    View Parva
-                    <ArrowRight className="w-4 h-4" />
-                </button>
-            </div>
-        </div>
+        <ScriptureChapterCard
+            number={bookMatch ? Number(bookMatch[1]) : undefined}
+            unitLabel="Book"
+            title={parva.name}
+            meta={`${chapterCount} Adhyaya${chapterCount === 1 ? '' : 's'}`}
+            accentColor={parva.color}
+            onRead={() => onSelect(parva)}
+        />
     );
 }

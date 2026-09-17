@@ -1,46 +1,25 @@
-import { ArrowRight } from 'lucide-react';
+import ScriptureChapterCard from './ScriptureChapterCard';
+import { KANDA_ORDER } from '../utils/ramayanaKandas';
 
+/**
+ * RamayanaKandaCard — one Kanda tile in the "Choose a Kanda" grid.
+ * Renders through the same ScriptureChapterCard used for Bhagavad Gita's
+ * chapter grid, so every book in the Scriptures section shares one card
+ * design.
+ */
 export default function RamayanaKandaCard({ kanda, onSelect }) {
     const sargaCount = kanda.chapters.length;
+    const orderIndex = KANDA_ORDER.indexOf(kanda.name);
 
     return (
-        <div
-            role="button"
-            tabIndex={0}
-            onClick={() => onSelect(kanda)}
-            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onSelect(kanda)}
-            className="bg-white rounded-2xl p-6 cursor-pointer shadow-card-md"
-            style={{ border: '1px solid #f5e8d0' }}
-        >
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4"
-                style={{ background: kanda.color }}>
-                {kanda.emoji}
-            </div>
-
-            <h3 className="text-xl font-semibold text-[#2d1a0e] mb-2"
-                style={{ fontFamily: 'var(--font-display)' }}>
-                {kanda.name}
-            </h3>
-
-            <p className="text-sm text-gray-500 leading-relaxed mb-4">
-                {kanda.description}
-            </p>
-
-            <div className="flex items-center justify-between">
-                <span className="text-xs px-3 py-1 rounded-full font-medium"
-                    style={{ background: '#f5f0e8', color: '#6b5b4d', border: '1px solid #edd9b3' }}>
-                    {sargaCount} Sarga{sargaCount === 1 ? '' : 's'}
-                </span>
-
-                <button
-                    onClick={(e) => { e.stopPropagation(); onSelect(kanda); }}
-                    className="flex items-center gap-1.5 text-sm font-semibold transition-colors"
-                    style={{ color: '#e07c0a' }}
-                >
-                    View Kanda
-                    <ArrowRight className="w-4 h-4" />
-                </button>
-            </div>
-        </div>
+        <ScriptureChapterCard
+            number={orderIndex >= 0 ? orderIndex + 1 : undefined}
+            unitLabel="Kanda"
+            title={kanda.name}
+            description={kanda.description}
+            meta={`${sargaCount} Sarga${sargaCount === 1 ? '' : 's'}`}
+            accentColor={kanda.color}
+            onRead={() => onSelect(kanda)}
+        />
     );
 }

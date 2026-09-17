@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Loader2, BookOpen } from 'lucide-react';
+import { ArrowLeft, Loader2, BookOpen } from 'lucide-react';
 import { scriptureApi } from '../services/scriptureApi';
 import ScriptureReader from '../components/ScriptureReader';
 import ItemNotFound from '../components/ItemNotFound';
@@ -155,12 +155,12 @@ export default function ScriptureDetailPage() {
             {/* ── Full-width hero: breaks out of the centered container entirely ── */}
             {meta && !loadingMeta && (
                 <Reveal>
-                    <div className="relative w-full overflow-hidden" style={{ background: meta.color || '#f5f0e8', minHeight: '440px' }}>
+                    <div className="relative w-full overflow-hidden" style={{ background: meta.color || '#f5f0e8', minHeight: '560px' }}>
                         {meta.image_url ? (
                             <img
                                 src={meta.image_url}
                                 alt={meta.title}
-                                className="absolute inset-0 w-full h-full object-cover object-center"
+                                className="absolute inset-0 w-full h-full object-cover object-top"
                                 onError={(e) => { e.currentTarget.style.display = 'none'; }}
                             />
                         ) : null}
@@ -194,7 +194,7 @@ export default function ScriptureDetailPage() {
                         </div>
 
                         {/* Content, inset to align with the rest of the page's content width */}
-                        <div className="relative z-10 flex flex-col justify-end h-full min-h-[440px] max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 sm:pb-12 pt-24 pointer-events-none">
+                        <div className="relative z-10 flex flex-col justify-end h-full min-h-[560px] max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 sm:pb-12 pt-24 pointer-events-none">
                             <span className="inline-block text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-widest mb-4 w-fit"
                                 style={{ background: 'rgba(255,255,255,0.92)', color: '#a34d07' }}>
                                 {meta.category || 'Sacred Text'}
@@ -225,7 +225,7 @@ export default function ScriptureDetailPage() {
                 </Reveal>
             )}
 
-            <div className={`mx-auto px-4 sm:px-6 lg:px-8 py-12 ${chapterNumber || (isRamayana && !selectedKanda) || (isMahabharata && !selectedParva) || isChapterGridView ? 'max-w-6xl' : 'max-w-3xl'}`}>
+            <div className={`mx-auto px-4 sm:px-6 lg:px-8 py-12 ${meta && meta.chapters.length > 0 ? 'max-w-7xl' : 'max-w-3xl'}`}>
                 {!meta && (
                     <button
                         onClick={goBack}
@@ -311,9 +311,11 @@ export default function ScriptureDetailPage() {
 
                         {/* ── Ramayana: Kanda cards → Sarga list ─────────────────────── */}
                         {isRamayana && meta.chapters.length > 0 && !selectedKanda && !chapterNumber && (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 fade-up-section">
-                                {kandas.map((kanda) => (
-                                    <RamayanaKandaCard key={kanda.name} kanda={kanda} onSelect={setSelectedKanda} />
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch fade-up-section">
+                                {kandas.map((kanda, i) => (
+                                    <Reveal key={kanda.name} index={i} className="h-full">
+                                        <RamayanaKandaCard kanda={kanda} onSelect={setSelectedKanda} />
+                                    </Reveal>
                                 ))}
                             </div>
                         )}
@@ -329,36 +331,25 @@ export default function ScriptureDetailPage() {
                                     Back to Kandas
                                 </button>
 
-                                <div className="flex items-center gap-3 mb-6">
-                                    <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-                                        style={{ background: selectedKanda.color }}>
-                                        {selectedKanda.emoji}
-                                    </div>
-                                    <div>
-                                        <h2 className="text-lg font-bold text-[#2d1a0e]" style={{ fontFamily: 'var(--font-display)' }}>
-                                            {selectedKanda.name}
-                                        </h2>
-                                        <p className="text-xs text-gray-400">{selectedKanda.chapters.length} Sargas</p>
-                                    </div>
+                                <div className="flex items-baseline justify-between gap-3 mb-6">
+                                    <h2 className="text-2xl sm:text-3xl font-bold" style={{ color: '#2d1a0e', fontFamily: 'var(--font-display)' }}>
+                                        {selectedKanda.name}
+                                    </h2>
+                                    <span className="text-xs text-gray-400 flex-shrink-0">
+                                        {selectedKanda.chapters.length} Sargas
+                                    </span>
                                 </div>
 
-                                <div className="flex flex-col gap-4">
-                                    {selectedKanda.chapters.map((c) => (
-                                        <button
-                                            key={c.chapter_number}
-                                            onClick={() => openChapter(c.chapter_number)}
-                                            className="w-full flex items-center justify-between gap-4 px-6 sm:px-8 py-5 rounded-full text-left transition-all hover:opacity-90"
-                                            style={{ background: 'linear-gradient(135deg, #f5a742, #e8901f)' }}
-                                        >
-                                            <span className="text-base sm:text-lg font-bold text-white">
-                                                {c.sargaLabel || c.title}
-                                            </span>
-                                            <span className="flex items-center gap-1.5 text-sm sm:text-base font-semibold text-white flex-shrink-0"
-                                                style={{ textDecoration: 'underline' }}>
-                                                <ArrowRight className="w-4 h-4" style={{ textDecoration: 'none' }} />
-                                                View Verses
-                                            </span>
-                                        </button>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
+                                    {selectedKanda.chapters.map((c, i) => (
+                                        <Reveal key={c.chapter_number} index={i} className="h-full">
+                                            <ScriptureChapterCard
+                                                title={c.sargaLabel || c.title}
+                                                meta={c.verse_count != null ? `${c.verse_count} Verse${c.verse_count === 1 ? '' : 's'}` : undefined}
+                                                accentColor={selectedKanda.color}
+                                                onRead={() => openChapter(c.chapter_number)}
+                                            />
+                                        </Reveal>
                                     ))}
                                 </div>
                             </div>
@@ -366,9 +357,11 @@ export default function ScriptureDetailPage() {
 
                         {/* ── Mahabharata: Parva cards → Adhyaya list ─────────────────── */}
                         {isMahabharata && meta.chapters.length > 0 && !selectedParva && !chapterNumber && (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 fade-up-section">
-                                {parvas.map((parva) => (
-                                    <MahabharataParvaCard key={parva.name} parva={parva} onSelect={setSelectedParva} />
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch fade-up-section">
+                                {parvas.map((parva, i) => (
+                                    <Reveal key={parva.name} index={i} className="h-full">
+                                        <MahabharataParvaCard parva={parva} onSelect={setSelectedParva} />
+                                    </Reveal>
                                 ))}
                             </div>
                         )}
@@ -384,36 +377,25 @@ export default function ScriptureDetailPage() {
                                     Back to Parvas
                                 </button>
 
-                                <div className="flex items-center gap-3 mb-6">
-                                    <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-                                        style={{ background: selectedParva.color }}>
-                                        {selectedParva.emoji}
-                                    </div>
-                                    <div>
-                                        <h2 className="text-lg font-bold text-[#2d1a0e]" style={{ fontFamily: 'var(--font-display)' }}>
-                                            {selectedParva.name}
-                                        </h2>
-                                        <p className="text-xs text-gray-400">{selectedParva.chapters.length} Adhyayas</p>
-                                    </div>
+                                <div className="flex items-baseline justify-between gap-3 mb-6">
+                                    <h2 className="text-2xl sm:text-3xl font-bold" style={{ color: '#2d1a0e', fontFamily: 'var(--font-display)' }}>
+                                        {selectedParva.name}
+                                    </h2>
+                                    <span className="text-xs text-gray-400 flex-shrink-0">
+                                        {selectedParva.chapters.length} Adhyayas
+                                    </span>
                                 </div>
 
-                                <div className="flex flex-col gap-4">
-                                    {selectedParva.chapters.map((c) => (
-                                        <button
-                                            key={c.chapter_number}
-                                            onClick={() => openChapter(c.chapter_number)}
-                                            className="w-full flex items-center justify-between gap-4 px-6 sm:px-8 py-5 rounded-full text-left transition-all hover:opacity-90"
-                                            style={{ background: 'linear-gradient(135deg, #f5a742, #e8901f)' }}
-                                        >
-                                            <span className="text-base sm:text-lg font-bold text-white">
-                                                {c.adhyayaLabel || c.title}
-                                            </span>
-                                            <span className="flex items-center gap-1.5 text-sm sm:text-base font-semibold text-white flex-shrink-0"
-                                                style={{ textDecoration: 'underline' }}>
-                                                <ArrowRight className="w-4 h-4" style={{ textDecoration: 'none' }} />
-                                                View Verses
-                                            </span>
-                                        </button>
+                                <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6 sm:gap-8 items-stretch">
+                                    {selectedParva.chapters.map((c, i) => (
+                                        <Reveal key={c.chapter_number} index={i} className="h-full">
+                                            <ScriptureChapterCard
+                                                title={c.adhyayaLabel || c.title}
+                                                meta={c.verse_count != null ? `${c.verse_count} Verse${c.verse_count === 1 ? '' : 's'}` : undefined}
+                                                accentColor={selectedParva.color}
+                                                onRead={() => openChapter(c.chapter_number)}
+                                            />
+                                        </Reveal>
                                     ))}
                                 </div>
                             </div>
@@ -447,7 +429,7 @@ export default function ScriptureDetailPage() {
                                     </span>
                                 </div>
 
-                                <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 items-stretch">
+                                <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
                                     {meta.chapters.map((c, i) => {
                                         const title = isRigveda
                                             ? (c.title || `Mandala ${c.chapter_number}`)
@@ -462,6 +444,7 @@ export default function ScriptureDetailPage() {
                                                     unitLabel={isRigveda ? 'Mandala' : 'Chapter'}
                                                     title={title}
                                                     meta={metaLine}
+                                                    accentColor={meta.color}
                                                     onRead={() => openChapter(c.chapter_number)}
                                                 />
                                             </Reveal>

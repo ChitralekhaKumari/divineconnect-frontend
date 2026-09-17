@@ -4,9 +4,9 @@ import { Heart, BookOpen, Landmark, ScrollText, Trash2, Loader2 } from 'lucide-r
 import { useWishlist } from '../context/WishlistContext';
 import Reveal from '../components/Reveal';
 
-// prayer/temple open a modal on their list page, scripture has its own page
+// scripture and prayer both have their own dedicated page; temple opens a modal on its list page
 const SECTION_META = {
-    prayer: { label: 'Prayers', icon: BookOpen, path: (id) => `/prayers?open=${encodeURIComponent(id)}` },
+    prayer: { label: 'Prayers', icon: BookOpen, path: (id) => `/prayers/${encodeURIComponent(id)}` },
     scripture: { label: 'Scriptures', icon: ScrollText, path: (id) => `/scriptures/${id}` },
     temple: { label: 'Temples', icon: Landmark, path: (id) => `/temples?open=${encodeURIComponent(id)}` },
 };

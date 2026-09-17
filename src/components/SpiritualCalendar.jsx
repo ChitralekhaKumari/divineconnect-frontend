@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
   ChevronLeft, ChevronRight, Bell, Calendar, Moon, Star, Sun, Loader,
   Sparkles, ChevronDown, ChevronUp, MapPin,
 } from 'lucide-react';
+import { calendarName, uiText, DEFAULT_LANG } from '../data/calendarTypes';
 
 const RAW_API = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 const API = RAW_API.replace(/\/api\/?$/, '');
@@ -94,8 +96,13 @@ function ChoghadiyaHoraTable({ title, rows, kind }) {
   );
 }
 
-export default function SpiritualCalendar() {
+export default function SpiritualCalendar({ calendarType = null }) {
   const today = new Date();
+  const lang = typeof window !== 'undefined'
+    ? (localStorage.getItem('dc-calendar-lang') || DEFAULT_LANG)
+    : DEFAULT_LANG;
+  const t = uiText(lang);
+  const typeLabel = calendarType ? calendarName(calendarType, lang) : null;
   const [cur, setCur] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const [selectedDay, setSelectedDay] = useState(today.getDate());
   const [festivals, setFestivals] = useState([]);
@@ -193,8 +200,20 @@ export default function SpiritualCalendar() {
   return (
     <div className="min-h-screen bg-[#f7f4ef] px-4 py-10 md:px-10">
 
+      <div className="flex items-center gap-1.5 text-xs sm:text-sm font-medium mb-4">
+        <Link to="/home" className="hover:underline text-stone-500">{t.home}</Link>
+        <ChevronRight size={12} className="text-stone-300" />
+        <Link to="/calendar" className="hover:underline text-stone-500">{t.calendar}</Link>
+        {typeLabel && (
+          <>
+            <ChevronRight size={12} className="text-stone-300" />
+            <span className="font-semibold text-amber-700">{typeLabel}</span>
+          </>
+        )}
+      </div>
+
       <p className="text-xs font-semibold tracking-widest text-amber-700 uppercase mb-2">
-        Spiritual Calendar
+        {typeLabel || 'Spiritual Calendar'}
       </p>
       <h1 className="text-4xl text-stone-900 mb-3" style={{ fontFamily: 'var(--font-display)' }}>
         Your Divine Schedule
@@ -202,6 +221,7 @@ export default function SpiritualCalendar() {
       <p className="text-sm text-stone-500 mb-2 max-w-md leading-relaxed">
         Full daily Panchang — Tithi, Nakshatra, Muhurtas, Choghadiya and more —
         alongside festivals and public holidays.
+        {typeLabel && ' This view currently shows the shared India-wide Panchang; per-tradition data is coming soon.'}
       </p>
       <p className="text-xs text-stone-400 mb-8 flex items-center gap-1">
         <MapPin size={12} /> Panchang shown for {coords.label}

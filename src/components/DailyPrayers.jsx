@@ -1,35 +1,13 @@
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { BookOpen, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { prayerApi } from '../services/prayerApi';
 import Reveal from './Reveal';
+import PrayerCard from './PrayerCard';
 
-// Prayers have no dedicated "description" field yet, so — same as the full
-// Prayers page — we show deity + frequency as the short descriptive line.
-function PrayerCard({ prayer }) {
-  return (
-    <div className="bg-white rounded-2xl p-5 flex flex-col h-full shadow-card-md"
-      style={{ border: '1px solid #f5e8d0' }}>
-      <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 mb-3"
-        style={{ background: '#fdf0d8' }}>
-        <BookOpen className="w-5 h-5" style={{ color: '#e07c0a' }} />
-      </div>
-      <h3 className="text-base font-semibold text-[#2d1a0e] leading-snug"
-        style={{ fontFamily: 'var(--font-display)' }}>
-        {prayer.title}
-      </h3>
-      <p className="text-xs text-gray-500 mt-1.5 flex-1">
-        {prayer.deity}{prayer.deity && prayer.frequency ? ' · ' : ''}{prayer.frequency}
-      </p>
-      <NavLink to={`/prayers?open=${prayer.slug || prayer.id}`}
-        className="mt-4 inline-flex items-center justify-center text-xs font-semibold px-4 py-2 rounded-full text-white transition-all hover:brightness-105 self-start"
-        style={{ background: 'linear-gradient(135deg, #f59b24, #e07c0a)' }}>
-        Read Prayer
-      </NavLink>
-    </div>
-  );
-}
-
+// Reuses the exact same card component as the /prayers listing page
+// (compact mode) — so this teaser strip on Home is pixel-identical in
+// design to the real Prayers section, just smaller so 4 fit in a row.
 export default function DailyPrayers() {
   const [prayers, setPrayers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -73,7 +51,7 @@ export default function DailyPrayers() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {prayers.map((prayer, i) => (
               <Reveal key={prayer.id} index={i} className="h-full">
-                <PrayerCard prayer={prayer} />
+                <PrayerCard prayer={prayer} compact />
               </Reveal>
             ))}
           </div>

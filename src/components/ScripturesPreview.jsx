@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { scriptureApi } from '../services/scriptureApi';
+import ScriptureChapterCard from './ScriptureChapterCard';
 import Reveal from './Reveal';
 
 // The backend stores the 4 Vedas as separate texts (rigveda, yajurveda,
@@ -12,33 +13,21 @@ import Reveal from './Reveal';
 // still fully browsable from the Scriptures page).
 const FEATURED_SLUGS = ['bhagavad-gita', 'ramayana', 'mahabharata', 'rigveda'];
 
-function ScriptureCard({ scripture }) {
-  return (
-    <div className="bg-white rounded-2xl p-5 flex flex-col h-full shadow-card-md"
-      style={{ border: '1px solid #f5e8d0' }}>
-      <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 mb-3"
-        style={{ background: scripture.color || '#fdf0d8' }}>
-        {scripture.emoji || '📜'}
-      </div>
-      <h3 className="text-base font-semibold text-[#2d1a0e] leading-snug line-clamp-2"
-        style={{ fontFamily: 'var(--font-display)' }}>
-        {scripture.title}
-      </h3>
-      <p className="text-xs text-gray-500 mt-1.5 flex-1 line-clamp-3">
-        {scripture.description}
-      </p>
-      <NavLink to={`/scriptures/${scripture.slug}`}
-        className="mt-4 inline-flex items-center justify-center text-xs font-semibold px-4 py-2 rounded-full text-white transition-all hover:brightness-105 self-start"
-        style={{ background: 'linear-gradient(135deg, #f59b24, #e07c0a)' }}>
-        Read More
-      </NavLink>
-    </div>
-  );
+// ScriptureChapterCard (the same card used inside every book's chapter/Kanda/
+// Parva grid) already picks an icon off `unitLabel` — reusing that mapping
+// here keeps the homepage book cards visually identical to the internal
+// pages instead of introducing a second card design.
+function unitLabelFor(slug) {
+  if (slug === 'ramayana') return 'Kanda';
+  if (slug === 'mahabharata') return 'Book';
+  if (slug?.includes('veda')) return 'Mandala';
+  return 'Chapter';
 }
 
 export default function ScripturesPreview() {
   const [scriptures, setScriptures] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let cancelled = false;
@@ -82,11 +71,19 @@ export default function ScripturesPreview() {
           </div>
         )}
 
+        {/* Same ScriptureChapterCard used inside every book's own page —
+            identical icon treatment, typography and offset panel, so the
+            homepage preview matches the rest of the Scriptures section. */}
         {!loading && scriptures.length > 0 && (
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-fr">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 items-stretch">
             {scriptures.map((s, i) => (
               <Reveal key={s.slug} index={i} className="h-full">
-                <ScriptureCard scripture={s} />
+                <ScriptureChapterCard
+                  unitLabel={unitLabelFor(s.slug)}
+                  title={s.title}
+                  description={s.description}
+                  onRead={() => navigate(`/scriptures/${s.slug}`)}
+                />
               </Reveal>
             ))}
           </div>

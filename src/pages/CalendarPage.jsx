@@ -1,5 +1,5 @@
-import SpiritualCalendar from '../components/SpiritualCalendar';
+import CalendarHub from '../components/CalendarHub';
 
 export default function CalendarPage() {
-  return <SpiritualCalendar />;
+  return <CalendarHub />;
 }
